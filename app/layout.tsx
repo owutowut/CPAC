@@ -19,7 +19,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={sarabun.className}>{children}</body>
+      <body className={sarabun.className + 'bg-[#4e54c8] h-full w-full area'}>
+        <ul className="circles">
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
+        <main className="bg-slate-900 rounded-2xl drop-shadow-xl p-[2rem] mx-[6rem] my-[3rem]">
+          {children}
+        </main>
+      </body>
     </html>
   );
 }

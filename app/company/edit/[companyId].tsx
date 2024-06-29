@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function page() {
   return (
-    <div>tax</div>
+    <div>edit</div>
   )
 }

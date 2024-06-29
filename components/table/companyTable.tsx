@@ -1,15 +1,22 @@
 "use client"
 
-import React from 'react';
-import { Table, Input } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Table } from 'antd';
 import type { TableProps } from 'antd';
-import { FaBuilding } from "react-icons/fa6";
-import { IoIosAddCircle } from "react-icons/io";
-import { FaEdit } from "react-icons/fa";
-import { AlignType } from 'rc-table/lib/interface'
-import Link from 'next/link';
 
-interface DataType {
+import Link from 'next/link';
+import { MdDelete, MdEditSquare } from 'react-icons/md';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { db } from '@/libs/firebase';
+import { get, onValue, ref, set, update } from 'firebase/database';
+import Router from 'next/router';
+import { useRouter } from 'next/navigation';
+
+import { Button, Popconfirm } from 'antd';
+import { FaEye } from 'react-icons/fa6';
+
+interface CompanyI {
+  companyId: string;
   taxNumber: string;
   employerNumber: string;
   branchNumber: string;
@@ -17,88 +24,108 @@ interface DataType {
   position: string;
   companyName: string;
   address: string;
+  status: string;
 }
 
-const columns: TableProps<DataType>['columns'] = [
-  {
-    title: 'เลขประจำตัวผู้เสียภาษี(13 หลัก)*',
-    dataIndex: 'taxNumber',
-    key: 'taxNumber',
-    sorter: (a, b) => a.taxNumber.localeCompare(b.taxNumber)
-  },
-  {
-    title: 'เลขที่บัญชีนายจ้าง',
-    dataIndex: 'employerNumber',
-    key: 'employerNumber',
-    sorter: (a, b) => a.employerNumber.localeCompare(b.employerNumber)
-  },
-  {
-    title: 'ลำดับที่สาขา',
-    dataIndex: 'branchNumber',
-    key: 'branchNumber',
-    sorter: (a, b) => a.branchNumber.localeCompare(b.branchNumber)
-  },
-  {
-    title: 'ชื่อนายจ้าง',
-    dataIndex: 'employerName',
-    key: 'employerName',
-    sorter: (a, b) => a.employerName.localeCompare(b.employerName)
-  },
-  {
-    title: 'ตำแหน่ง',
-    dataIndex: 'position',
-    key: 'position',
-    sorter: (a, b) => a.position.localeCompare(b.position)
-  },
-  {
-    title: 'ชื่อบริษัท',
-    dataIndex: 'companyName',
-    key: 'companyName',
-    sorter: (a, b) => a.companyName.localeCompare(b.companyName)
-  },
-  {
-    title: 'ที่อยู่',
-    dataIndex: 'address',
-    key: 'address',
-    sorter: (a, b) => a.address.localeCompare(b.address)
-  },
-  {
-    title: 'Action',
-    dataIndex: 'taxNumber',
-    key: 'taxNumber',
-    render: (e) => (<div className='flex justify-center items-center'><Link href={'/company/' + e}><FaEdit className='w-8 h-8 hover:scale-105 duration-300 hover:text-blue-800' /></Link></div>)
-  },
-];
-
-const data: DataType[] = [
-  {
-    taxNumber: '0633563000047',
-    employerNumber: '6320000627',
-    branchNumber: '00000',
-    employerName: 'นายพิศาล จินดาทอง',
-    position: 'กรรมการผู้จัดการ',
-    companyName: 'ห้างหุ้นส่วนจำกัด รถมือสองแม่สอด ดีที่สุด',
-    address: '381 หมู่ที่ 2 ตำบลแม่กุ อำเภอแม่สอด จังหวัดตาก 63110',
-  },
-];
-
 export default function CompanyTable() {
-  return (
-    <div className='space-y-[2rem]'>
-      <div className='flex justify-between items-center'>
-        <div className='flex items-center space-x-4'>
-          <FaBuilding className='w-10 h-10' />
-          <h2 className='font-bold text-[1.8rem]'>ข้อมูลสถานประกอบการ</h2>
-        </div>
-        <div className='flex items-center space-x-6 w-1/3'>
-          <Input className='h-[2.6rem] w-full rounded-xl hover:scale-105 duration-300' placeholder="ค้นหาชื่อสถานประกอบการ..." allowClear />
-          <Link href={'/company/add'} className='flex justify-center items-center space-x-2 h-[2.6rem] w-[10rem] bg-slate-600 text-white hover:bg-white hover:text-slate-600 rounded-xl hover:scale-105 duration-300'>
-            <IoIosAddCircle className='w-6 h-6' />
-            <span>เพิ่มข้อมูล</span>
+  const router = useRouter()
+
+  const [companyData, setCompanyData] = useState<CompanyI[]>([]);
+
+  const allCompanyData = ref(db, 'company');
+
+  useEffect(() => {
+    onValue(allCompanyData, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const companyArray = Object.keys(data).map(companyId => ({
+          companyId,
+          ...data[companyId]
+        }));
+        setCompanyData(companyArray.filter((data) => data.status !== 'archived'));
+      } else {
+        setCompanyData([]);
+      }
+    });
+  }, [])
+
+  const confirm = (companyId: string) => {
+    update(ref(db, 'company/' + companyId), {
+      status: 'archived',
+    });
+  };
+
+  const columns: TableProps<CompanyI>['columns'] = [
+    {
+      title: 'เลขประจำตัวผู้เสียภาษี(13 หลัก)*',
+      dataIndex: 'taxNumber',
+      key: 'taxNumber',
+      sorter: (a, b) => a.taxNumber.localeCompare(b.taxNumber)
+    },
+    {
+      title: 'เลขที่บัญชีนายจ้าง',
+      dataIndex: 'employerNumber',
+      key: 'employerNumber',
+      sorter: (a, b) => a.employerNumber.localeCompare(b.employerNumber)
+    },
+    {
+      title: 'ลำดับที่สาขา',
+      dataIndex: 'branchNumber',
+      key: 'branchNumber',
+      sorter: (a, b) => a.branchNumber.localeCompare(b.branchNumber)
+    },
+    {
+      title: 'ชื่อนายจ้าง',
+      dataIndex: 'employerName',
+      key: 'employerName',
+      sorter: (a, b) => a.employerName.localeCompare(b.employerName)
+    },
+    {
+      title: 'ตำแหน่ง',
+      dataIndex: 'position',
+      key: 'position',
+      sorter: (a, b) => a.position.localeCompare(b.position)
+    },
+    {
+      title: 'ชื่อบริษัท',
+      dataIndex: 'companyName',
+      key: 'companyName',
+      sorter: (a, b) => a.companyName.localeCompare(b.companyName)
+    },
+    {
+      title: 'ที่อยู่',
+      dataIndex: 'address',
+      key: 'address',
+      sorter: (a, b) => a.address.localeCompare(b.address)
+    },
+    {
+      title: 'Action',
+      dataIndex: 'companyId',
+      key: 'companyId',
+      render: (e) => (
+        <div className='flex justify-center items-center space-x-3'>
+          <Link href={'/company/view/' + e} className='cursor-default'>
+            <FaEye className='w-7 h-7 hover:scale-110 duration-300 text-slate-600' />
           </Link>
-        </div>
-      </div>
-      <Table columns={columns} dataSource={data} />
-    </div>
+          <Link href={'/company/edit/' + e} className='cursor-default'>
+            <MdEditSquare className='w-7 h-7 hover:scale-110 duration-300 text-blue-600' />
+          </Link>
+          <Popconfirm
+            title="ยืนยันการลบข้อมูล"
+            icon={<ExclamationCircleOutlined style={{ color: 'red' }} />}
+            description="ข้อมูลของคุณจะถูกลบออกจากระบบ กรุณาตรวจสอบข้อมูลอีกครั้ง"
+            okText="ยืนยัน"
+            cancelText="ยกเลิก"
+            onConfirm={() => confirm(e)}
+            placement="left"
+          >
+            <MdDelete className='w-7 h-7 hover:scale-110 duration-300 text-red-600' />
+          </Popconfirm >
+        </div>)
+    },
+  ];
+
+  return (
+    <Table columns={columns} dataSource={companyData} />
   )
 }
