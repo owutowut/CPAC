@@ -8,28 +8,13 @@ import Link from 'next/link';
 import { MdDelete, MdEditSquare } from 'react-icons/md';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { db } from '@/libs/firebase';
-import { get, onValue, ref, set, update } from 'firebase/database';
-import Router from 'next/router';
-import { useRouter } from 'next/navigation';
+import { onValue, ref, update } from 'firebase/database';
 
-import { Button, Popconfirm } from 'antd';
+import { Popconfirm } from 'antd';
 import { FaEye } from 'react-icons/fa6';
-
-interface CompanyI {
-  companyId: string;
-  taxNumber: string;
-  employerNumber: string;
-  branchNumber: string;
-  employerName: string;
-  position: string;
-  companyName: string;
-  address: string;
-  status: string;
-}
+import { CompanyI } from '@/interfaces/company';
 
 export default function CompanyTable() {
-  const router = useRouter()
-
   const [companyData, setCompanyData] = useState<CompanyI[]>([]);
 
   const allCompanyData = ref(db, 'company');
@@ -60,43 +45,85 @@ export default function CompanyTable() {
       title: 'เลขประจำตัวผู้เสียภาษี(13 หลัก)*',
       dataIndex: 'taxNumber',
       key: 'taxNumber',
-      sorter: (a, b) => a.taxNumber.localeCompare(b.taxNumber)
+      sorter: (a, b) => a.taxNumber.localeCompare(b.taxNumber),
+      width: 180,
+      render: (taxNumber) => (
+        <div className='w-[160px]'>
+          {taxNumber}
+        </div>
+      ),
     },
     {
       title: 'เลขที่บัญชีนายจ้าง',
       dataIndex: 'employerNumber',
       key: 'employerNumber',
-      sorter: (a, b) => a.employerNumber.localeCompare(b.employerNumber)
+      sorter: (a, b) => a.employerNumber.localeCompare(b.employerNumber),
+      width: 180,
+      render: (employerNumber) => (
+        <div className='w-[160px]'>
+          {employerNumber}
+        </div>
+      ),
     },
     {
       title: 'ลำดับที่สาขา',
       dataIndex: 'branchNumber',
       key: 'branchNumber',
-      sorter: (a, b) => a.branchNumber.localeCompare(b.branchNumber)
+      sorter: (a, b) => a.branchNumber.localeCompare(b.branchNumber),
+      width: 120,
+      render: (branchNumber) => (
+        <div className='w-[100px]'>
+          {branchNumber}
+        </div>
+      ),
     },
     {
       title: 'ชื่อนายจ้าง',
       dataIndex: 'employerName',
       key: 'employerName',
-      sorter: (a, b) => a.employerName.localeCompare(b.employerName)
+      sorter: (a, b) => a.employerName.localeCompare(b.employerName),
+      width: 260,
+      render: (employerName) => (
+        <div className='w-[240px]'>
+          {employerName}
+        </div>
+      ),
     },
     {
       title: 'ตำแหน่ง',
       dataIndex: 'position',
       key: 'position',
-      sorter: (a, b) => a.position.localeCompare(b.position)
+      sorter: (a, b) => a.position.localeCompare(b.position),
+      width: 180,
+      render: (employerName) => (
+        <div className='w-[160px]'>
+          {employerName}
+        </div>
+      ),
     },
     {
       title: 'ชื่อบริษัท',
       dataIndex: 'companyName',
       key: 'companyName',
-      sorter: (a, b) => a.companyName.localeCompare(b.companyName)
+      sorter: (a, b) => a.companyName.localeCompare(b.companyName),
+      width: 260,
+      render: (address) => (
+        <div className='w-[240px]'>
+          {address}
+        </div>
+      ),
     },
     {
       title: 'ที่อยู่',
       dataIndex: 'address',
       key: 'address',
-      sorter: (a, b) => a.address.localeCompare(b.address)
+      sorter: (a, b) => a.address.localeCompare(b.address),
+      width: 240,
+      render: (address) => (
+        <div className='w-[220px]'>
+          {address}
+        </div>
+      ),
     },
     {
       title: 'Action',

@@ -1,53 +1,75 @@
 "use client"
 
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaBuilding } from 'react-icons/fa6'
 import { IoIosAddCircle } from 'react-icons/io'
 import { IoCaretBack } from 'react-icons/io5'
 
 import { db } from '@/libs/firebase';
-import { ref, push } from "firebase/database";
-import { useRouter } from 'next/navigation'
+import { ref, set, onValue } from "firebase/database";
+import { useRouter, useParams } from 'next/navigation'
 import { CompanyI } from '@/interfaces/company'
 import { initialCompany } from '@/utils/initial'
 
-export default function CreateCompany() {
+export default function EditCompany() {
   const [companyData, setCompanyData] = useState<CompanyI>(initialCompany);
 
-  const [employeeSocialSecurityRates, setEmployeeSocialSecurityRates] = useState<number[]>(Array(12).fill(0));
-  const [employerSocialSecurityRates, setEmployerSocialSecurityRates] = useState<number[]>(Array(12).fill(0));
-  const [allRatesEmployee, setAllRatesEmployee] = useState<number>(0);
-  const [allRatesEmployer, setAllRatesEmployer] = useState<number>(0);
+  const router = useRouter();
+  const { companyId } = useParams();
+  const companyDataById = ref(db, 'company/' + companyId);
+
+  useEffect(() => {
+    companyId &&
+      onValue(companyDataById, (snapshot) => {
+        const data = snapshot.val();
+        data && setCompanyData(data);
+      });
+  }, [companyId])
+
+  const [allRatesEmployee, setAllRatesEmployee] = useState<any>(0);
+  const [allRatesEmployer, setAllRatesEmployer] = useState<any>(0);
 
   const onSetAllEmployeeRates = () => {
-    const employeeRates = Array(12).fill(allRatesEmployee);
-    setEmployeeSocialSecurityRates(employeeRates);
+    const newRates = parseFloat(allRatesEmployee)
+    const employeeRates = Array.from({ length: 12 }, () => newRates);
+    setCompanyData(companyData => ({
+      ...companyData,
+      employeeSocialSecurityRates: employeeRates
+    }));
   }
 
   const onSetAllEmployerRates = () => {
-    const employerRates = Array(12).fill(allRatesEmployer);
-    setEmployerSocialSecurityRates(employerRates);
+    const newRates = parseFloat(allRatesEmployer)
+    const employerRates = Array.from({ length: 12 }, () => newRates);
+    setCompanyData(companyData => ({
+      ...companyData,
+      employerSocialSecurityRates: employerRates
+    }));
   }
 
   const handleEmployeeRatesChange = (index: any, value: any) => {
-    const newRates = [...employeeSocialSecurityRates];
+    const newRates = [...companyData.employeeSocialSecurityRates];
     newRates[index] = value;
-    setEmployeeSocialSecurityRates(newRates);
+    setCompanyData(data => ({
+      ...data,
+      employeeSocialSecurityRates: newRates
+    }));
   };
 
   const handleEmployerRatesChange = (index: any, value: any) => {
-    const newRates = [...employerSocialSecurityRates];
+    const newRates = [...companyData.employerSocialSecurityRates];
     newRates[index] = value;
-    setEmployerSocialSecurityRates(newRates);
+    setCompanyData(data => ({
+      ...data,
+      employerSocialSecurityRates: newRates
+    }));
   };
 
-  const router = useRouter()
-
-  const onCreateCompany = async (e: any) => {
+  const onEditCompany = async (e: any) => {
     e.preventDefault();
     try {
-      push(ref(db, 'company/'), {
+      set(ref(db, 'company/' + companyId), {
         taxNumber: companyData.taxNumber,
         employerNumber: companyData.employerNumber,
         branchNumber: companyData.employerNumber,
@@ -56,8 +78,8 @@ export default function CreateCompany() {
         companyName: companyData.companyName,
         address: companyData.address,
         status: companyData.status,
-        employeeSocialSecurityRates: employeeSocialSecurityRates,
-        employerSocialSecurityRates: employerSocialSecurityRates,
+        employeeSocialSecurityRates: companyData.employeeSocialSecurityRates,
+        employerSocialSecurityRates: companyData.employerSocialSecurityRates,
       });
       router.push('/')
     } catch (error) {
@@ -78,20 +100,20 @@ export default function CreateCompany() {
   ];
 
   return (
-    <form onSubmit={onCreateCompany} className='space-y-[2rem]'>
+    <form onSubmit={onEditCompany} className='space-y-[2rem]'>
       <div className='flex justify-between items-center'>
         <div className='flex items-center space-x-4'>
           <FaBuilding className='w-10 h-10' />
-          <h2 className='font-bold text-[1.8rem]'>เพิ่มข้อมูลสถานประกอบการ</h2>
+          <h2 className='font-bold text-[1.8rem]'>แก้ไขข้อมูลสถานประกอบการ</h2>
         </div>
         <div className='flex items-center space-x-4'>
           <Link href={'/'} className='flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white hover:bg-white hover:text-slate-600 rounded-xl hover:scale-105 duration-300'>
             <IoCaretBack className='w-6 h-6' />
             <span>ย้อนกลับ</span>
           </Link>
-          <button type='submit' className='flex justify-center items-center space-x-2 p-2 bg-green-600 text-white hover:bg-white hover:text-green-600 rounded-xl hover:scale-105 duration-300'>
+          <button type='submit' className='flex justify-center items-center space-x-2 p-2 bg-blue-600 text-white hover:bg-white hover:text-blue-600 rounded-xl hover:scale-105 duration-300'>
             <IoIosAddCircle className='w-6 h-6' />
-            <span>เพิ่มข้อมูล</span>
+            <span>บันทึกข้อมูล</span>
           </button>
         </div>
       </div>
@@ -99,31 +121,31 @@ export default function CreateCompany() {
         <div className='w-[65%] h-full bg-white rounded-xl text-slate-900 p-4 space-y-4'>
           <div className='space-y-2'>
             <p>เลขประจำตัวผู้เสียภาษี(13 หลัก)*</p>
-            <input onChange={(e) => handleCompanyDataChange('taxNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input value={companyData['taxNumber']} onChange={(e) => handleCompanyDataChange('taxNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
           </div>
           <div className='space-y-2'>
             <p>เลขที่บัญชีนายจ้าง</p>
-            <input onChange={(e) => handleCompanyDataChange('employerNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input value={companyData['employerNumber']} onChange={(e) => handleCompanyDataChange('employerNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
           </div>
           <div className='space-y-2'>
             <p>ลำดับที่สาขา</p>
-            <input onChange={(e) => handleCompanyDataChange('branchNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input value={companyData['branchNumber']} onChange={(e) => handleCompanyDataChange('branchNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
           </div>
           <div className='space-y-2'>
             <p>ชื่อนายจ้าง</p>
-            <input onChange={(e) => handleCompanyDataChange('employerName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input value={companyData['employerName']} onChange={(e) => handleCompanyDataChange('employerName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
           </div>
           <div className='space-y-2'>
             <p>ตำแหน่ง</p>
-            <input onChange={(e) => handleCompanyDataChange('position', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input value={companyData['position']} onChange={(e) => handleCompanyDataChange('position', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
           </div>
           <div className='space-y-2'>
             <p>ชื่อบริษัท</p>
-            <input onChange={(e) => handleCompanyDataChange('companyName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input value={companyData['companyName']} onChange={(e) => handleCompanyDataChange('companyName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
           </div>
           <div className='space-y-2'>
             <p>ที่อยู่</p>
-            <textarea onChange={(e) => handleCompanyDataChange('address', e.target.value)} required rows={6} className='w-full bg-slate-900 rounded-xl text-white p-2'></textarea>
+            <textarea value={companyData['address']} onChange={(e) => handleCompanyDataChange('address', e.target.value)} required rows={6} className='w-full bg-slate-900 rounded-xl text-white p-2'></textarea>
           </div>
         </div>
         <div className='w-[35%] h-full bg-white rounded-xl text-slate-900 overflow-hidden'>
@@ -142,7 +164,7 @@ export default function CreateCompany() {
                   <td>
                     <input
                       type="number"
-                      value={employeeSocialSecurityRates[index]}
+                      value={companyData['employeeSocialSecurityRates'][index]}
                       onChange={(e) => handleEmployeeRatesChange(index, e.target.value)}
                       required
                       className='text-center w-full h-full bg-slate-900 rounded-lg text-white p-2'
@@ -151,7 +173,7 @@ export default function CreateCompany() {
                   <td>
                     <input
                       type="number"
-                      value={employerSocialSecurityRates[index]}
+                      value={companyData['employerSocialSecurityRates'][index]}
                       onChange={(e) => handleEmployerRatesChange(index, e.target.value)}
                       required
                       className='text-center w-full h-full bg-slate-900 rounded-lg text-white p-2'
@@ -163,11 +185,11 @@ export default function CreateCompany() {
           </table>
           <div className='flex space-x-4 p-4'>
             <span className='font-semibold whitespace-nowrap'>กรอกทั้งหมด ( % )</span>
-            <input value={allRatesEmployee} type="number" onChange={(e) => setAllRatesEmployee(parseFloat(e.target.value))} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input value={allRatesEmployee} type="number" onChange={(e) => setAllRatesEmployee(e.target.value)} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
             <span onClick={onSetAllEmployeeRates} className='cursor-default h-full w-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
               แทนที่
             </span>
-            <input value={allRatesEmployer} type="number" onChange={(e) => setAllRatesEmployer(parseFloat(e.target.value))} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input value={allRatesEmployer} type="number" onChange={(e) => setAllRatesEmployer(e.target.value)} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
             <span onClick={onSetAllEmployerRates} className='cursor-default h-full w-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
               แทนที่
             </span>
