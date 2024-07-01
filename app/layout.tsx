@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={sarabun.className + 'bg-[#4e54c8] h-full w-full area'}>
+      <body className={sarabun.className + ' bg-[#4e54c8] h-full w-full area'}>
         <ul className="circles">
           <li></li>
           <li></li>

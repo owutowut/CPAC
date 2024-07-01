@@ -1,4 +1,4 @@
-import { CompanyI } from "@/interfaces/company";
+import { CompanyI, EmployeeI } from "@/interfaces/company";
 
 export const initialCompany: CompanyI = {
   taxNumber: '',
@@ -11,4 +11,17 @@ export const initialCompany: CompanyI = {
   status: 'active',
   employeeSocialSecurityRates: [],
   employerSocialSecurityRates: [],
+}
+
+export const initialEmployee: EmployeeI = {
+  companyId:'',
+  IDcardNumber: '',
+  titleName: '',
+  firstName: '',
+  lastName: '',
+  address: '',
+  position: '',
+  workStartDate: '',
+  resignationDate: '',
+  status: 'active',
 }

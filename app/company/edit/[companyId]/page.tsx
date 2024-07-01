@@ -11,20 +11,27 @@ import { ref, set, onValue } from "firebase/database";
 import { useRouter, useParams } from 'next/navigation'
 import { CompanyI } from '@/interfaces/company'
 import { initialCompany } from '@/utils/initial'
+import { FaEdit } from 'react-icons/fa'
+import { AiFillEdit } from 'react-icons/ai'
+import { RiAccountPinBoxFill } from 'react-icons/ri'
 
-export default function EditCompany() {
+export default function EditEmployee() {
   const [companyData, setCompanyData] = useState<CompanyI>(initialCompany);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const router = useRouter();
   const { companyId } = useParams();
   const companyDataById = ref(db, 'company/' + companyId);
 
   useEffect(() => {
-    companyId &&
+    if (companyId) {
+      setLoading(true)
       onValue(companyDataById, (snapshot) => {
         const data = snapshot.val();
         data && setCompanyData(data);
       });
+      setLoading(false)
+    }
   }, [companyId])
 
   const [allRatesEmployee, setAllRatesEmployee] = useState<any>(0);
@@ -81,6 +88,7 @@ export default function EditCompany() {
         employeeSocialSecurityRates: companyData.employeeSocialSecurityRates,
         employerSocialSecurityRates: companyData.employerSocialSecurityRates,
       });
+      console.log(companyData);
       router.push('/')
     } catch (error) {
       console.error(error);
@@ -103,7 +111,7 @@ export default function EditCompany() {
     <form onSubmit={onEditCompany} className='space-y-[2rem]'>
       <div className='flex justify-between items-center'>
         <div className='flex items-center space-x-4'>
-          <FaBuilding className='w-10 h-10' />
+          <RiAccountPinBoxFill className='w-10 h-10' />
           <h2 className='font-bold text-[1.8rem]'>แก้ไขข้อมูลสถานประกอบการ</h2>
         </div>
         <div className='flex items-center space-x-4'>
@@ -112,90 +120,94 @@ export default function EditCompany() {
             <span>ย้อนกลับ</span>
           </Link>
           <button type='submit' className='flex justify-center items-center space-x-2 p-2 bg-blue-600 text-white hover:bg-white hover:text-blue-600 rounded-xl hover:scale-105 duration-300'>
-            <IoIosAddCircle className='w-6 h-6' />
+            <AiFillEdit className='w-6 h-6' />
             <span>บันทึกข้อมูล</span>
           </button>
         </div>
       </div>
-      <div className='flex space-x-6'>
-        <div className='w-[65%] h-full bg-white rounded-xl text-slate-900 p-4 space-y-4'>
-          <div className='space-y-2'>
-            <p>เลขประจำตัวผู้เสียภาษี(13 หลัก)*</p>
-            <input value={companyData['taxNumber']} onChange={(e) => handleCompanyDataChange('taxNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+      {!loading ?
+        <div className='flex space-x-6'>
+          <div className='w-[65%] h-full bg-white rounded-xl text-slate-900 p-4 space-y-4'>
+            <div className='space-y-2'>
+              <p>เลขประจำตัวผู้เสียภาษี(13 หลัก)*</p>
+              <input value={companyData['taxNumber']} onChange={(e) => handleCompanyDataChange('taxNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            </div>
+            <div className='space-y-2'>
+              <p>เลขที่บัญชีนายจ้าง</p>
+              <input value={companyData['employerNumber']} onChange={(e) => handleCompanyDataChange('employerNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            </div>
+            <div className='space-y-2'>
+              <p>ลำดับที่สาขา</p>
+              <input value={companyData['branchNumber']} onChange={(e) => handleCompanyDataChange('branchNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            </div>
+            <div className='space-y-2'>
+              <p>ชื่อนายจ้าง</p>
+              <input value={companyData['employerName']} onChange={(e) => handleCompanyDataChange('employerName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            </div>
+            <div className='space-y-2'>
+              <p>ตำแหน่ง</p>
+              <input value={companyData['position']} onChange={(e) => handleCompanyDataChange('position', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            </div>
+            <div className='space-y-2'>
+              <p>ชื่อบริษัท</p>
+              <input value={companyData['companyName']} onChange={(e) => handleCompanyDataChange('companyName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            </div>
+            <div className='space-y-2'>
+              <p>ที่อยู่</p>
+              <textarea value={companyData['address']} onChange={(e) => handleCompanyDataChange('address', e.target.value)} required rows={6} className='w-full bg-slate-900 rounded-xl text-white p-2'></textarea>
+            </div>
           </div>
-          <div className='space-y-2'>
-            <p>เลขที่บัญชีนายจ้าง</p>
-            <input value={companyData['employerNumber']} onChange={(e) => handleCompanyDataChange('employerNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
-          </div>
-          <div className='space-y-2'>
-            <p>ลำดับที่สาขา</p>
-            <input value={companyData['branchNumber']} onChange={(e) => handleCompanyDataChange('branchNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
-          </div>
-          <div className='space-y-2'>
-            <p>ชื่อนายจ้าง</p>
-            <input value={companyData['employerName']} onChange={(e) => handleCompanyDataChange('employerName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
-          </div>
-          <div className='space-y-2'>
-            <p>ตำแหน่ง</p>
-            <input value={companyData['position']} onChange={(e) => handleCompanyDataChange('position', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
-          </div>
-          <div className='space-y-2'>
-            <p>ชื่อบริษัท</p>
-            <input value={companyData['companyName']} onChange={(e) => handleCompanyDataChange('companyName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
-          </div>
-          <div className='space-y-2'>
-            <p>ที่อยู่</p>
-            <textarea value={companyData['address']} onChange={(e) => handleCompanyDataChange('address', e.target.value)} required rows={6} className='w-full bg-slate-900 rounded-xl text-white p-2'></textarea>
-          </div>
-        </div>
-        <div className='w-[35%] h-full bg-white rounded-xl text-slate-900 overflow-hidden'>
-          <table id='customTable'>
-            <thead>
-              <tr>
-                <th>อัตราประกันสังคม</th>
-                <th>ลูกจ้าง</th>
-                <th>นายจ้าง</th>
-              </tr>
-            </thead>
-            <tbody>
-              {months.map((month, index) => (
-                <tr key={index}>
-                  <td className='text-center'>{month}</td>
-                  <td>
-                    <input
-                      type="number"
-                      value={companyData['employeeSocialSecurityRates'][index]}
-                      onChange={(e) => handleEmployeeRatesChange(index, e.target.value)}
-                      required
-                      className='text-center w-full h-full bg-slate-900 rounded-lg text-white p-2'
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={companyData['employerSocialSecurityRates'][index]}
-                      onChange={(e) => handleEmployerRatesChange(index, e.target.value)}
-                      required
-                      className='text-center w-full h-full bg-slate-900 rounded-lg text-white p-2'
-                    />
-                  </td>
+          <div className='w-[35%] h-full bg-white rounded-xl text-slate-900 overflow-hidden'>
+            <table id='customTable'>
+              <thead>
+                <tr>
+                  <th>อัตราประกันสังคม</th>
+                  <th>ลูกจ้าง</th>
+                  <th>นายจ้าง</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className='flex space-x-4 p-4'>
-            <span className='font-semibold whitespace-nowrap'>กรอกทั้งหมด ( % )</span>
-            <input value={allRatesEmployee} type="number" onChange={(e) => setAllRatesEmployee(e.target.value)} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
-            <span onClick={onSetAllEmployeeRates} className='cursor-default h-full w-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
-              แทนที่
-            </span>
-            <input value={allRatesEmployer} type="number" onChange={(e) => setAllRatesEmployer(e.target.value)} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
-            <span onClick={onSetAllEmployerRates} className='cursor-default h-full w-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
-              แทนที่
-            </span>
+              </thead>
+              <tbody>
+                {months.map((month, index) => (
+                  <tr key={index}>
+                    <td className='text-center'>{month}</td>
+                    <td>
+                      <input
+                        type="number"
+                        value={companyData['employeeSocialSecurityRates'][index]}
+                        onChange={(e) => handleEmployeeRatesChange(index, e.target.value)}
+                        required
+                        className='text-center w-full h-full bg-slate-900 rounded-lg text-white p-2'
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        value={companyData['employerSocialSecurityRates'][index]}
+                        onChange={(e) => handleEmployerRatesChange(index, e.target.value)}
+                        required
+                        className='text-center w-full h-full bg-slate-900 rounded-lg text-white p-2'
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className='flex space-x-4 p-4'>
+              <span className='font-semibold whitespace-nowrap'>กรอกทั้งหมด ( % )</span>
+              <input value={allRatesEmployee} type="number" onChange={(e) => setAllRatesEmployee(e.target.value)} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <span onClick={onSetAllEmployeeRates} className='cursor-default h-full w-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
+                แทนที่
+              </span>
+              <input value={allRatesEmployer} type="number" onChange={(e) => setAllRatesEmployer(e.target.value)} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <span onClick={onSetAllEmployerRates} className='cursor-default h-full w-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
+                แทนที่
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+        :
+        <></>
+      }
     </form >
   )
 }
