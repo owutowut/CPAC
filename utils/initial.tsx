@@ -1,6 +1,7 @@
 import { CompanyI, EmployeeI } from "@/interfaces/company";
 
 export const initialCompany: CompanyI = {
+  companyId: '',
   taxNumber: '',
   employerNumber: '',
   branchNumber: '',
@@ -14,7 +15,8 @@ export const initialCompany: CompanyI = {
 }
 
 export const initialEmployee: EmployeeI = {
-  companyId:'',
+  employeeId: '',
+  companyId: '',
   IDcardNumber: '',
   titleName: '',
   firstName: '',
@@ -24,4 +26,22 @@ export const initialEmployee: EmployeeI = {
   workStartDate: '',
   resignationDate: '',
   status: 'active',
+}
+
+export const initialAlertSuccess = {
+  className: 'text-green-700',
+  message: 'เพิ่มข้อมูลสำเร็จ',
+  type: 'success'
+}
+
+export const initialAlertError = {
+  className: 'text-red-700',
+  message: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งภายหลัง',
+  type: 'error'
+}
+
+export const initialAlertInfo = {
+  className: 'text-blue-700',
+  message: 'แก้ไขข้อมูลสำเร็จ',
+  type: 'info'
 }

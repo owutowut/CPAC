@@ -1,17 +1,19 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+
 import { Table } from 'antd';
 import type { TableProps } from 'antd';
-
-import Link from 'next/link';
-import { MdDelete, MdEditSquare } from 'react-icons/md';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { db } from '@/libs/firebase';
-import { onValue, ref, update } from 'firebase/database';
-
 import { Popconfirm } from 'antd';
+
+import { db } from '@/libs/firebase';
+import { collection, getDocs, where, query, doc, updateDoc, onSnapshot } from 'firebase/firestore';
+
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { FaEye } from 'react-icons/fa6';
+import { MdDelete, MdEditSquare } from 'react-icons/md';
+
 import { CompanyI } from '@/interfaces/company';
 
 export default function CompanyTable(props: any) {
@@ -20,33 +22,41 @@ export default function CompanyTable(props: any) {
   const [loading, setLoading] = useState<boolean>(true);
   const [companyData, setCompanyData] = useState<CompanyI[]>([]);
 
-  const allCompanyData = ref(db, 'company');
+  const allCompanyData = query(collection(db, 'company'), where('status', '!=', 'archived'));
+
+  const fetchAllCompanyData = async () => {
+    onSnapshot(allCompanyData, (snapshot) => {
+      setLoading(true);
+      const data = snapshot.docs.map(doc => ({
+        companyId: doc.id,
+        ...doc.data()
+      })) as CompanyI[];
+      if (searchCompany) {
+        const filteredData = data.filter(company => company.taxNumber.includes(searchCompany));
+        setCompanyData(filteredData);
+      } else {
+        setCompanyData(data);
+      }
+      setLoading(false);
+    })
+  };
 
   useEffect(() => {
-    onValue(allCompanyData, (snapshot) => {
-      setLoading(true)
-      const data = snapshot.val();
-      if (data) {
-        const companyArray = Object.keys(data).map(companyId => ({
-          companyId,
-          ...data[companyId]
-        }));
-        if (searchCompany) {
-          setCompanyData(companyArray.filter((data) =>
-            data.taxNumber.toLowerCase().includes(searchCompany.trim().toLowerCase()) && data.status !== 'archived'
-          ));
-        } else {
-          setCompanyData(companyArray.filter((data) => data.status !== 'archived'));
-        }
-      }
-      setLoading(false)
-    });
+    fetchAllCompanyData()
   }, [searchCompany])
 
-  const confirmDelete = (companyId: string) => {
-    update(ref(db, 'company/' + companyId), {
-      status: 'archived',
-    });
+  const confirmDelete = async (companyId: string) => {
+    try {
+      setLoading(true);
+      const companyDataByID = doc(db, 'company', companyId);
+      await updateDoc(companyDataByID, {
+        status: 'archived'
+      });
+    } catch (error) {
+      console.error('Error archiving company:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const columns: TableProps<CompanyI>['columns'] = [

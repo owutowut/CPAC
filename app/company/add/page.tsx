@@ -2,23 +2,27 @@
 
 import Link from 'next/link'
 import React, { useState } from 'react'
+
+import { Alert } from 'antd'
+
+import { db } from '@/libs/firebase';
+import { addDoc, collection } from 'firebase/firestore'
+
+import { CompanyI } from '@/interfaces/company'
+import { initialAlertError, initialAlertSuccess, initialCompany } from '@/utils/initial'
+
 import { FaBuilding } from 'react-icons/fa6'
 import { IoIosAddCircle } from 'react-icons/io'
 import { IoCaretBack } from 'react-icons/io5'
 
-import { db } from '@/libs/firebase';
-import { ref, push } from "firebase/database";
-import { useRouter } from 'next/navigation'
-import { CompanyI } from '@/interfaces/company'
-import { initialCompany } from '@/utils/initial'
-
 export default function CreateCompany() {
   const [companyData, setCompanyData] = useState<CompanyI>(initialCompany);
-
   const [employeeSocialSecurityRates, setEmployeeSocialSecurityRates] = useState<number[]>(Array(12).fill(0));
   const [employerSocialSecurityRates, setEmployerSocialSecurityRates] = useState<number[]>(Array(12).fill(0));
   const [allRatesEmployee, setAllRatesEmployee] = useState<number>(0);
   const [allRatesEmployer, setAllRatesEmployer] = useState<number>(0);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [alert, setAlert] = useState<any>(initialAlertSuccess);
 
   const onSetAllEmployeeRates = () => {
     const employeeRates = Array(12).fill(allRatesEmployee);
@@ -42,15 +46,22 @@ export default function CreateCompany() {
     setEmployerSocialSecurityRates(newRates);
   };
 
-  const router = useRouter()
+  const clearInput = () => {
+    setCompanyData(initialCompany)
+    setEmployeeSocialSecurityRates(Array(12).fill(0))
+    setEmployerSocialSecurityRates(Array(12).fill(0))
+    setAllRatesEmployee(0)
+    setAllRatesEmployer(0)
+  }
 
   const onCreateCompany = async (e: any) => {
     e.preventDefault();
     try {
-      push(ref(db, 'company/'), {
+      const ref = collection(db, 'company');
+      await addDoc(ref, {
         taxNumber: companyData.taxNumber,
         employerNumber: companyData.employerNumber,
-        branchNumber: companyData.employerNumber,
+        branchNumber: companyData.branchNumber,
         employerName: companyData.employerName,
         position: companyData.position,
         companyName: companyData.companyName,
@@ -59,8 +70,18 @@ export default function CreateCompany() {
         employeeSocialSecurityRates: employeeSocialSecurityRates,
         employerSocialSecurityRates: employerSocialSecurityRates,
       });
-      router.push('/')
+      setAlert(initialAlertSuccess);
+      setShowAlert(true)
+      clearInput()
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
     } catch (error) {
+      setAlert(initialAlertError);
+      setShowAlert(true)
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
       console.error(error);
     }
   }
@@ -85,6 +106,7 @@ export default function CreateCompany() {
           <h2 className='font-bold text-[1.8rem]'>เพิ่มข้อมูลสถานประกอบการ</h2>
         </div>
         <div className='flex items-center space-x-4'>
+          {showAlert && <Alert className={alert.className} message={alert.message} type={alert.type} showIcon />}
           <Link href={'/'} className='flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white hover:bg-white hover:text-slate-600 rounded-xl hover:scale-105 duration-300'>
             <IoCaretBack className='w-6 h-6' />
             <span>ย้อนกลับ</span>
@@ -99,31 +121,31 @@ export default function CreateCompany() {
         <div className='w-[65%] h-full bg-white rounded-xl text-slate-900 p-4 space-y-4'>
           <div className='space-y-2'>
             <p>เลขประจำตัวผู้เสียภาษี(13 หลัก)*</p>
-            <input onChange={(e) => handleCompanyDataChange('taxNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input type='number' value={companyData.taxNumber} onChange={(e) => handleCompanyDataChange('taxNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
           </div>
           <div className='space-y-2'>
             <p>เลขที่บัญชีนายจ้าง</p>
-            <input onChange={(e) => handleCompanyDataChange('employerNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input type='number' value={companyData.employerNumber} onChange={(e) => handleCompanyDataChange('employerNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
           </div>
           <div className='space-y-2'>
             <p>ลำดับที่สาขา</p>
-            <input onChange={(e) => handleCompanyDataChange('branchNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input type='number' value={companyData.branchNumber} onChange={(e) => handleCompanyDataChange('branchNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
           </div>
           <div className='space-y-2'>
             <p>ชื่อนายจ้าง</p>
-            <input onChange={(e) => handleCompanyDataChange('employerName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input value={companyData.employerName} onChange={(e) => handleCompanyDataChange('employerName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
           </div>
           <div className='space-y-2'>
             <p>ตำแหน่ง</p>
-            <input onChange={(e) => handleCompanyDataChange('position', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input value={companyData.position} onChange={(e) => handleCompanyDataChange('position', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
           </div>
           <div className='space-y-2'>
             <p>ชื่อบริษัท</p>
-            <input onChange={(e) => handleCompanyDataChange('companyName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input value={companyData.companyName} onChange={(e) => handleCompanyDataChange('companyName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
           </div>
           <div className='space-y-2'>
             <p>ที่อยู่</p>
-            <textarea onChange={(e) => handleCompanyDataChange('address', e.target.value)} required rows={6} className='w-full bg-slate-900 rounded-xl text-white p-2'></textarea>
+            <textarea value={companyData.address} onChange={(e) => handleCompanyDataChange('address', e.target.value)} required rows={6} className='w-full bg-slate-900 rounded-xl text-white p-2'></textarea>
           </div>
         </div>
         <div className='w-[35%] h-full bg-white rounded-xl text-slate-900 overflow-hidden'>

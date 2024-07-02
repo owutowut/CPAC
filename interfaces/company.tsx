@@ -1,4 +1,5 @@
 export interface CompanyI {
+    companyId: string,
     taxNumber: string;
     employerNumber: string;
     branchNumber: string;
@@ -12,6 +13,7 @@ export interface CompanyI {
 }
 
 export interface EmployeeI {
+    employeeId: string,
     companyId: string,
     IDcardNumber: string;
     titleName: string;

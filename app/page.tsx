@@ -21,7 +21,7 @@ export default function Home() {
           <h2 className='font-bold text-[1.8rem]'>ระบบจัดการข้อมูลบัญชีบริษัท</h2>
         </div>
         <div className='flex items-center space-x-4'>
-          <Input onChange={(e) => setSearchCompany(e.target.value)} className='text-[1rem] w-[30rem] h-[2.6rem] rounded-xl' placeholder="ค้นหาสถานประกอบการด้วยเลขประจำตัวผู้เสียภาษี..." allowClear />
+          <Input type='number' onChange={(e) => setSearchCompany(e.target.value)} className='text-[1rem] w-[30rem] h-[2.6rem] rounded-xl' placeholder="ค้นหาสถานประกอบการด้วยเลขประจำตัวผู้เสียภาษี..." allowClear />
           <Link href={'/company/add'} className='h-full flex justify-center items-center space-x-2 p-2 bg-green-600 text-white hover:bg-white hover:text-green-600 rounded-xl hover:scale-105 duration-300'>
             <IoIosAddCircle className='w-6 h-6' />
             <span>เพิ่มข้อมูล</span>

@@ -2,39 +2,48 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 
 import EmployeeTable from '@/components/table/employeeTable'
 
 import { Input, Select } from 'antd'
 
+import { db } from '@/libs/firebase';
+import { doc, getDoc } from 'firebase/firestore'
+
+import { initialCompany } from '@/utils/initial'
+import { CompanyI } from '@/interfaces/company'
+
 import { FaBuilding } from 'react-icons/fa6'
 import { IoIosAddCircle } from 'react-icons/io'
 import { IoCaretBack } from 'react-icons/io5'
-import { useParams, useRouter } from 'next/navigation'
-import { onValue, ref } from 'firebase/database'
-import { CompanyI } from '@/interfaces/company'
-import { db } from '@/libs/firebase';
 import { RiAccountPinBoxFill } from 'react-icons/ri'
-import { FaEdit } from 'react-icons/fa'
-import { AiFillEdit } from 'react-icons/ai'
 
 export default function ViewCompany() {
   const [loading, setLoading] = useState<boolean>(true);
   const [companyData, setCompanyData] = useState<CompanyI>();
 
   const { companyId } = useParams();
-  const companyDataById = ref(db, 'company/' + companyId);
+  const refByID = doc(db, `company/${companyId}`);
 
-  useEffect(() => {
+  const fetchCompanyByID = async () => {
     setLoading(true)
-    if (companyId) {
-      onValue(companyDataById, (snapshot) => {
-        const data = snapshot.val();
-        data && setCompanyData(data);
-      });
+    const snapshot = await getDoc(refByID);
+    if (snapshot.exists()) {
+      const data = {
+        companyId: snapshot.id,
+        ...snapshot.data()
+      } as CompanyI;
+      setCompanyData(data);
+    } else {
+      setCompanyData(initialCompany)
     }
     setLoading(false)
-  }, [companyId])
+  };
+
+  useEffect(() => {
+    fetchCompanyByID();
+  }, []);
 
   const [searchEmployee, setSearchEmployee] = useState<string>('')
 
@@ -74,13 +83,13 @@ export default function ViewCompany() {
         {!loading ?
           <>
             <div className='bg-white rounded-lg text-black p-6 grid grid-cols-3 gap-4'>
-              <p><mark className='bg-transparent font-semibold'> ชื่อบริษัท : </mark> {companyData && companyData.companyName} </p>
-              <p><mark className='bg-transparent font-semibold'> เลขประจำตัวผู้เสียภาษี(13 หลัก)* : </mark> {companyData && companyData.taxNumber} </p>
-              <p><mark className='bg-transparent font-semibold'> ลำดับที่สาขา : </mark> {companyData && companyData.branchNumber} </p>
-              <p><mark className='bg-transparent font-semibold'> เลขที่บัญชีนายจ้าง : </mark> {companyData && companyData.employerNumber} </p>
-              <p><mark className='bg-transparent font-semibold'> ชื่อนายจ้าง : </mark> {companyData && companyData.employerName} </p>
-              <p><mark className='bg-transparent font-semibold'> ตำแหน่ง : </mark> {companyData && companyData.position} </p>
-              <p><mark className='bg-transparent font-semibold'> ที่อยู่ </mark> {companyData && companyData.address} </p>
+              <p><mark className='bg-transparent font-bold mr-2'> ชื่อบริษัท : </mark> {companyData && companyData.companyName} </p>
+              <p><mark className='bg-transparent font-bold mr-2'> เลขประจำตัวผู้เสียภาษี(13 หลัก)* : </mark> {companyData && companyData.taxNumber} </p>
+              <p><mark className='bg-transparent font-bold mr-2'> ลำดับที่สาขา : </mark> {companyData && companyData.branchNumber} </p>
+              <p><mark className='bg-transparent font-bold mr-2'> เลขที่บัญชีนายจ้าง : </mark> {companyData && companyData.employerNumber} </p>
+              <p><mark className='bg-transparent font-bold mr-2'> ชื่อนายจ้าง : </mark> {companyData && companyData.employerName} </p>
+              <p><mark className='bg-transparent font-bold mr-2'> ตำแหน่ง : </mark> {companyData && companyData.position} </p>
+              <p><mark className='bg-transparent font-bold mr-2'> ที่อยู่ : </mark> {companyData && companyData.address} </p>
             </div>
             <div className='space-y-[2rem]'>
               <div className='flex items-center justify-between'>
@@ -121,11 +130,15 @@ export default function ViewCompany() {
                   </Select>
                 </div>
               </div>
-              <EmployeeTable searchEmployee={searchEmployee} companyId={companyId} />
             </div>
           </>
           :
-          <></>
+          <div className='h-full w-full flex justify-center items-center'>
+            <svg className="animate-spin -ml-1 mr-3 h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
         }
       </div>
     </>

@@ -2,40 +2,49 @@
 
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { FaBuilding } from 'react-icons/fa6'
-import { IoIosAddCircle } from 'react-icons/io'
-import { IoCaretBack } from 'react-icons/io5'
+import { useParams } from 'next/navigation'
+
+import { Alert } from 'antd'
 
 import { db } from '@/libs/firebase';
-import { ref, set, onValue } from "firebase/database";
-import { useRouter, useParams } from 'next/navigation'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
+
 import { CompanyI } from '@/interfaces/company'
-import { initialCompany } from '@/utils/initial'
-import { FaEdit } from 'react-icons/fa'
+import { initialAlertError, initialAlertInfo, initialCompany } from '@/utils/initial'
+
+import { IoCaretBack } from 'react-icons/io5'
 import { AiFillEdit } from 'react-icons/ai'
 import { RiAccountPinBoxFill } from 'react-icons/ri'
 
 export default function EditEmployee() {
-  const [companyData, setCompanyData] = useState<CompanyI>(initialCompany);
   const [loading, setLoading] = useState<boolean>(true);
-
-  const router = useRouter();
-  const { companyId } = useParams();
-  const companyDataById = ref(db, 'company/' + companyId);
-
-  useEffect(() => {
-    if (companyId) {
-      setLoading(true)
-      onValue(companyDataById, (snapshot) => {
-        const data = snapshot.val();
-        data && setCompanyData(data);
-      });
-      setLoading(false)
-    }
-  }, [companyId])
-
+  const [companyData, setCompanyData] = useState<CompanyI>(initialCompany);
   const [allRatesEmployee, setAllRatesEmployee] = useState<any>(0);
   const [allRatesEmployer, setAllRatesEmployer] = useState<any>(0);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [alert, setAlert] = useState<any>(initialAlertInfo);
+
+  const { companyId } = useParams();
+  const refByID = doc(db, `company/${companyId}`);
+
+  const fetchCompanyByID = async () => {
+    setLoading(true)
+    const snapshot = await getDoc(refByID);
+    if (snapshot.exists()) {
+      const data = {
+        companyId: snapshot.id,
+        ...snapshot.data()
+      } as CompanyI;
+      setCompanyData(data);
+    } else {
+      setCompanyData(initialCompany)
+    }
+    setLoading(false)
+  };
+
+  useEffect(() => {
+    fetchCompanyByID();
+  }, []);
 
   const onSetAllEmployeeRates = () => {
     const newRates = parseFloat(allRatesEmployee)
@@ -76,10 +85,10 @@ export default function EditEmployee() {
   const onEditCompany = async (e: any) => {
     e.preventDefault();
     try {
-      set(ref(db, 'company/' + companyId), {
+      await updateDoc(refByID, {
         taxNumber: companyData.taxNumber,
         employerNumber: companyData.employerNumber,
-        branchNumber: companyData.employerNumber,
+        branchNumber: companyData.branchNumber,
         employerName: companyData.employerName,
         position: companyData.position,
         companyName: companyData.companyName,
@@ -88,9 +97,17 @@ export default function EditEmployee() {
         employeeSocialSecurityRates: companyData.employeeSocialSecurityRates,
         employerSocialSecurityRates: companyData.employerSocialSecurityRates,
       });
-      console.log(companyData);
-      router.push('/')
+      setAlert(initialAlertInfo);
+      setShowAlert(true)
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
     } catch (error) {
+      setAlert(initialAlertError);
+      setShowAlert(true)
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
       console.error(error);
     }
   }
@@ -115,6 +132,7 @@ export default function EditEmployee() {
           <h2 className='font-bold text-[1.8rem]'>แก้ไขข้อมูลสถานประกอบการ</h2>
         </div>
         <div className='flex items-center space-x-4'>
+          {showAlert && <Alert className={alert.className} message={alert.message} type={alert.type} showIcon />}
           <Link href={'/'} className='flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white hover:bg-white hover:text-slate-600 rounded-xl hover:scale-105 duration-300'>
             <IoCaretBack className='w-6 h-6' />
             <span>ย้อนกลับ</span>
@@ -130,15 +148,15 @@ export default function EditEmployee() {
           <div className='w-[65%] h-full bg-white rounded-xl text-slate-900 p-4 space-y-4'>
             <div className='space-y-2'>
               <p>เลขประจำตัวผู้เสียภาษี(13 หลัก)*</p>
-              <input value={companyData['taxNumber']} onChange={(e) => handleCompanyDataChange('taxNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input type='number' value={companyData['taxNumber']} onChange={(e) => handleCompanyDataChange('taxNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>เลขที่บัญชีนายจ้าง</p>
-              <input value={companyData['employerNumber']} onChange={(e) => handleCompanyDataChange('employerNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input type='number' value={companyData['employerNumber']} onChange={(e) => handleCompanyDataChange('employerNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>ลำดับที่สาขา</p>
-              <input value={companyData['branchNumber']} onChange={(e) => handleCompanyDataChange('branchNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input type='number' value={companyData['branchNumber']} onChange={(e) => handleCompanyDataChange('branchNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>ชื่อนายจ้าง</p>
@@ -194,11 +212,11 @@ export default function EditEmployee() {
             </table>
             <div className='flex space-x-4 p-4'>
               <span className='font-semibold whitespace-nowrap'>กรอกทั้งหมด ( % )</span>
-              <input value={allRatesEmployee} type="number" onChange={(e) => setAllRatesEmployee(e.target.value)} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={allRatesEmployee} type="number" onChange={(e) => setAllRatesEmployee(parseFloat(e.target.value))} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
               <span onClick={onSetAllEmployeeRates} className='cursor-default h-full w-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
                 แทนที่
               </span>
-              <input value={allRatesEmployer} type="number" onChange={(e) => setAllRatesEmployer(e.target.value)} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={allRatesEmployer} type="number" onChange={(e) => setAllRatesEmployer(parseFloat(e.target.value))} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
               <span onClick={onSetAllEmployerRates} className='cursor-default h-full w-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
                 แทนที่
               </span>
@@ -206,7 +224,12 @@ export default function EditEmployee() {
           </div>
         </div>
         :
-        <></>
+        <div className='h-full w-full flex justify-center items-center'>
+          <svg className="animate-spin -ml-1 mr-3 h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
       }
     </form >
   )

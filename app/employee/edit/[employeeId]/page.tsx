@@ -2,42 +2,52 @@
 
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { FaBuilding } from 'react-icons/fa6'
-import { IoIosAddCircle } from 'react-icons/io'
-import { IoCaretBack } from 'react-icons/io5'
+import { useParams } from 'next/navigation'
+
+import { Alert } from 'antd'
 
 import { db } from '@/libs/firebase';
-import { onValue, ref, set } from "firebase/database";
-import { useRouter, useParams } from 'next/navigation'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
+
 import { EmployeeI } from '@/interfaces/company'
-import { initialEmployee } from '@/utils/initial'
+import { initialAlertError, initialAlertInfo, initialEmployee } from '@/utils/initial'
+
+import { IoCaretBack } from 'react-icons/io5'
 import { AiFillEdit } from 'react-icons/ai'
 import { RiAccountPinBoxFill } from 'react-icons/ri'
 
 export default function EditEmployee() {
-  const router = useRouter()
-  const { employeeId } = useParams();
-
-  const employeeDataById = ref(db, `employee/${employeeId}`);
-
-  const [employeeData, setEmployeeData] = useState<EmployeeI>(initialEmployee);
   const [loading, setLoading] = useState<boolean>(true);
+  const [employeeData, setEmployeeData] = useState<EmployeeI>(initialEmployee);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [alert, setAlert] = useState<any>(initialAlertInfo);
+
+  const { employeeId } = useParams();
+  const refByID = doc(db, `employee/${employeeId}`);
+
+  const fetchEmployeeByID = async () => {
+    setLoading(true)
+    const snapshot = await getDoc(refByID);
+    if (snapshot.exists()) {
+      const data = {
+        companyId: snapshot.id,
+        ...snapshot.data()
+      } as EmployeeI;
+      setEmployeeData(data);
+    } else {
+      setEmployeeData(initialEmployee)
+    }
+    setLoading(false)
+  };
 
   useEffect(() => {
-    if (employeeId) {
-      setLoading(true)
-      onValue(employeeDataById, (snapshot) => {
-        const data = snapshot.val();
-        data && setEmployeeData(data);
-      });
-      setLoading(false)
-    }
-  }, [employeeId])
+    fetchEmployeeByID();
+  }, []);
 
   const onEditCompany = async (e: any) => {
     e.preventDefault();
     try {
-      set(ref(db, `employee/${employeeId}`), {
+      updateDoc(refByID, {
         companyId: employeeData.companyId,
         IDcardNumber: employeeData.IDcardNumber,
         titleName: employeeData.titleName,
@@ -49,8 +59,17 @@ export default function EditEmployee() {
         resignationDate: employeeData.resignationDate,
         status: employeeData.status,
       });
-      router.push(`/company/view/${employeeData.companyId}`)
+      setAlert(initialAlertInfo);
+      setShowAlert(true)
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
     } catch (error) {
+      setAlert(initialAlertError);
+      setShowAlert(true)
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
       console.error(error);
     }
   }
@@ -70,6 +89,7 @@ export default function EditEmployee() {
           <h2 className='font-bold text-[1.8rem]'>แก้ไขข้อมูลพนักงาน</h2>
         </div>
         <div className='flex items-center space-x-4'>
+          {showAlert && <Alert className={alert.className} message={alert.message} type={alert.type} showIcon />}
           <Link href={`/company/view/${employeeData.companyId}`} className='flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white hover:bg-white hover:text-slate-600 rounded-xl hover:scale-105 duration-300'>
             <IoCaretBack className='w-6 h-6' />
             <span>ย้อนกลับ</span>
@@ -116,13 +136,18 @@ export default function EditEmployee() {
               </div>
               <div className='space-y-2'>
                 <p>วันที่ลาออก</p>
-                <input value={employeeData.resignationDate} onChange={(e) => handleEmployeeDataChange('resignationDate', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+                <input value={employeeData.resignationDate} onChange={(e) => handleEmployeeDataChange('resignationDate', e.target.value)} className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
               </div>
             </div>
           </div>
         </div>
         :
-        <></>
+        <div className='h-full w-full flex justify-center items-center'>
+          <svg className="animate-spin -ml-1 mr-3 h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
       }
     </form >
   )

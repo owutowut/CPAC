@@ -2,26 +2,36 @@
 
 import Link from 'next/link'
 import React, { useState } from 'react'
-import { FaBuilding } from 'react-icons/fa6'
-import { IoIosAddCircle } from 'react-icons/io'
-import { IoCaretBack } from 'react-icons/io5'
+import { useParams } from 'next/navigation'
+
+import { Alert } from 'antd';
 
 import { db } from '@/libs/firebase';
-import { ref, push } from "firebase/database";
-import { useRouter, useParams } from 'next/navigation'
 import { EmployeeI } from '@/interfaces/company'
-import { initialEmployee } from '@/utils/initial'
+
+import { initialAlertError, initialAlertSuccess, initialEmployee } from '@/utils/initial'
+
 import { RiAccountPinBoxFill } from 'react-icons/ri'
+import { IoIosAddCircle } from 'react-icons/io'
+import { IoCaretBack } from 'react-icons/io5'
+import { addDoc, collection } from 'firebase/firestore';
 
 export default function CreateEmployee() {
-  const router = useRouter()
   const { companyId } = useParams();
+
   const [employeeData, setEmployeeData] = useState<EmployeeI>(initialEmployee);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [alert, setAlert] = useState<any>(initialAlertSuccess);
+
+  const clearInput = () => {
+    setEmployeeData(initialEmployee)
+  }
 
   const onCreateCompany = async (e: any) => {
     e.preventDefault();
     try {
-      push(ref(db, `employee/`), {
+      const ref = collection(db, 'employee');
+      await addDoc(ref, {
         companyId: companyId,
         IDcardNumber: employeeData.IDcardNumber,
         titleName: employeeData.titleName,
@@ -33,8 +43,18 @@ export default function CreateEmployee() {
         resignationDate: employeeData.resignationDate,
         status: employeeData.status,
       });
-      router.push(`/company/view/${companyId}`)
+      setAlert(initialAlertSuccess);
+      setShowAlert(true)
+      clearInput()
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
     } catch (error) {
+      setAlert(initialAlertError);
+      setShowAlert(true)
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
       console.error(error);
     }
   }
@@ -54,6 +74,7 @@ export default function CreateEmployee() {
           <h2 className='font-bold text-[1.8rem]'>เพิ่มข้อมูลพนักงาน</h2>
         </div>
         <div className='flex items-center space-x-4'>
+          {showAlert && <Alert className={alert.className} message={alert.message} type={alert.type} showIcon />}
           <Link href={`/company/view/${companyId}`} className='flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white hover:bg-white hover:text-slate-600 rounded-xl hover:scale-105 duration-300'>
             <IoCaretBack className='w-6 h-6' />
             <span>ย้อนกลับ</span>
@@ -69,37 +90,37 @@ export default function CreateEmployee() {
           <div className='space-y-4'>
             <div className='space-y-2'>
               <p>เลขบัตรประชาชน</p>
-              <input onChange={(e) => handleEmployeeDataChange('IDcardNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={employeeData.IDcardNumber} onChange={(e) => handleEmployeeDataChange('IDcardNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>คำนำหน้านาม</p>
-              <input onChange={(e) => handleEmployeeDataChange('titleName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={employeeData.titleName} onChange={(e) => handleEmployeeDataChange('titleName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>ชื่อ</p>
-              <input onChange={(e) => handleEmployeeDataChange('firstName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={employeeData.firstName} onChange={(e) => handleEmployeeDataChange('firstName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>สกุล</p>
-              <input onChange={(e) => handleEmployeeDataChange('lastName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={employeeData.lastName} onChange={(e) => handleEmployeeDataChange('lastName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>ที่อยู่ตามบัตรประชาชนหรือที่อยู่ที่ติดต่อได้</p>
-              <textarea onChange={(e) => handleEmployeeDataChange('address', e.target.value)} required rows={6} className='w-full bg-slate-900 rounded-xl text-white p-2'></textarea>
+              <textarea value={employeeData.address} onChange={(e) => handleEmployeeDataChange('address', e.target.value)} required rows={6} className='w-full bg-slate-900 rounded-xl text-white p-2'></textarea>
             </div>
           </div>
           <div className='space-y-4'>
             <div className='space-y-2'>
               <p>ตำแหน่งงาน</p>
-              <input onChange={(e) => handleEmployeeDataChange('position', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={employeeData.position} onChange={(e) => handleEmployeeDataChange('position', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>วันที่เริ่มงาน</p>
-              <input onChange={(e) => handleEmployeeDataChange('workStartDate', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={employeeData.workStartDate} onChange={(e) => handleEmployeeDataChange('workStartDate', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>วันที่ลาออก</p>
-              <input onChange={(e) => handleEmployeeDataChange('resignationDate', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={employeeData.resignationDate} onChange={(e) => handleEmployeeDataChange('resignationDate', e.target.value)} className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
             </div>
           </div>
         </div>
