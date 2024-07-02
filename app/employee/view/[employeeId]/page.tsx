@@ -1,20 +1,21 @@
 "use client"
 
+import EmployeePaymentTable from '@/components/table/employeePayment'
 import { EmployeeI } from '@/interfaces/company'
 import { db } from '@/libs/firebase'
 import { initialEmployee } from '@/utils/initial'
-import { onValue, ref } from 'firebase/database'
 import { doc, getDoc } from 'firebase/firestore'
 import Link from 'next/link'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 import { IoCaretBack } from 'react-icons/io5'
 import { RiAccountPinBoxFill } from 'react-icons/ri'
 
 export default function ViewEmployee() {
-  const [employeeData, setEmployeeData] = useState<EmployeeI>(initialEmployee);
   const [loading, setLoading] = useState<boolean>(true);
+  const [employeeData, setEmployeeData] = useState<EmployeeI>(initialEmployee);
+
 
   const { employeeId } = useParams();
   const refByID = doc(db, `employee/${employeeId}`);
@@ -53,16 +54,17 @@ export default function ViewEmployee() {
         </div>
       </div>
       {!loading ?
-        <div>
+        <div className='space-y-[2rem]'>
           <div className='bg-white rounded-lg text-black p-6 space-y-2'>
             <p><mark className='bg-transparent font-semibold'> ชื่อ-สกุล พนักงาน : </mark> {employeeData.titleName} {employeeData.firstName} {employeeData.lastName}</p>
             <p><mark className='bg-transparent font-semibold'> เลขประจำตัวประชาชน : </mark> {employeeData.IDcardNumber}</p>
           </div>
+          <EmployeePaymentTable employeeId={employeeId} />
         </div>
         :
         <div className='h-full w-full flex justify-center items-center'>
           <svg className="animate-spin -ml-1 mr-3 h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
         </div>

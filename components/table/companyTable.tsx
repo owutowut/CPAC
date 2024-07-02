@@ -15,12 +15,13 @@ import { FaEye } from 'react-icons/fa6';
 import { MdDelete, MdEditSquare } from 'react-icons/md';
 
 import { CompanyI } from '@/interfaces/company';
+import { initialCompany } from '@/utils/initial';
 
 export default function CompanyTable(props: any) {
   const { searchCompany } = props
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [companyData, setCompanyData] = useState<CompanyI[]>([]);
+  const [companyData, setCompanyData] = useState<CompanyI[]>([initialCompany]);
 
   const allCompanyData = query(collection(db, 'company'), where('status', '!=', 'archived'));
 
