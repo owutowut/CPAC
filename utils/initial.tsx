@@ -1,4 +1,4 @@
-import { CompanyI, EmployeeI, EmployeePaymentI } from "@/interfaces/company";
+import { CompanyI, EmployeeI } from "@/interfaces/company";
 
 export const initialCompany: CompanyI = {
   companyId: '',
@@ -26,23 +26,6 @@ export const initialEmployee: EmployeeI = {
   workStartDate: '',
   resignationDate: '',
   status: 'active',
-}
-
-export const initialEmployeePayment: EmployeePaymentI = {
-  employeeId: '',
-  year: new Date().getFullYear() + 543,
-  jan: [],
-  feb: [],
-  mar: [],
-  apr: [],
-  may: [],
-  jun: [],
-  jul: [],
-  aug: [],
-  sep: [],
-  oct: [],
-  nov: [],
-  dec: []
 }
 
 export const initialAlertSuccess = {
