@@ -118,7 +118,7 @@ export default function CreateCompany() {
         </div>
       </div>
       <div className='flex space-x-6'>
-        <div className='w-[65%] h-full bg-white rounded-xl text-slate-900 p-4 space-y-4'>
+        <div className='w-[60%] h-full bg-white rounded-xl text-slate-900 p-4 space-y-4'>
           <div className='space-y-2'>
             <p>เลขประจำตัวผู้เสียภาษี(13 หลัก)*</p>
             <input type='number' value={companyData.taxNumber} onChange={(e) => handleCompanyDataChange('taxNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
@@ -148,13 +148,13 @@ export default function CreateCompany() {
             <textarea value={companyData.address} onChange={(e) => handleCompanyDataChange('address', e.target.value)} required rows={6} className='w-full bg-slate-900 rounded-xl text-white p-2'></textarea>
           </div>
         </div>
-        <div className='w-[35%] h-full bg-white rounded-xl text-slate-900 overflow-hidden'>
+        <div className='w-[40%] h-full bg-white rounded-xl text-slate-900 overflow-hidden'>
           <table id='customTable'>
             <thead>
               <tr>
                 <th>อัตราประกันสังคม</th>
-                <th>ลูกจ้าง</th>
-                <th>นายจ้าง</th>
+                <th>ลูกจ้าง ( % )</th>
+                <th>นายจ้าง ( % )</th>
               </tr>
             </thead>
             <tbody>
@@ -184,14 +184,14 @@ export default function CreateCompany() {
             </tbody>
           </table>
           <div className='flex space-x-4 p-4'>
-            <span className='font-semibold whitespace-nowrap'>กรอกทั้งหมด ( % )</span>
-            <input value={allRatesEmployee} type="number" onChange={(e) => setAllRatesEmployee(parseFloat(e.target.value))} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <span className='font-semibold whitespace-nowrap'>กรอกทั้งหมด</span>
+            <input value={allRatesEmployee} type="number" onChange={(e) => setAllRatesEmployee(parseFloat(e.target.value))} required className='text-center w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
             <span onClick={onSetAllEmployeeRates} className='cursor-default h-full w-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
-              แทนที่
+              ตกลง
             </span>
-            <input value={allRatesEmployer} type="number" onChange={(e) => setAllRatesEmployer(parseFloat(e.target.value))} required className='w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
+            <input value={allRatesEmployer} type="number" onChange={(e) => setAllRatesEmployer(parseFloat(e.target.value))} required className='text-center w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
             <span onClick={onSetAllEmployerRates} className='cursor-default h-full w-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
-              แทนที่
+              ตกลง
             </span>
           </div>
         </div>

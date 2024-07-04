@@ -68,6 +68,7 @@ export default function EmployeeTable(props: any) {
       key: 'IDcardNumber',
       sorter: (a, b) => a.IDcardNumber.localeCompare(b.IDcardNumber),
       width: 140,
+      align: 'center',
       render: (data) => {
         return (
           <div className='w-[140px] overflow-hidden line-clamp-1'>
@@ -82,6 +83,7 @@ export default function EmployeeTable(props: any) {
       key: 'titleName',
       sorter: (a, b) => a.titleName.localeCompare(b.titleName),
       width: 120,
+      align: 'center',
       render: (data) => {
         return (
           <div className='w-[120px] overflow-hidden line-clamp-1'>
@@ -95,10 +97,11 @@ export default function EmployeeTable(props: any) {
       dataIndex: 'firstName',
       key: 'firstName',
       sorter: (a, b) => a.firstName.localeCompare(b.firstName),
-      width: 160,
+      width: 180,
+      align: 'center',
       render: (data) => {
         return (
-          <div className='w-[160px] overflow-hidden line-clamp-1'>
+          <div className='w-[180px] overflow-hidden line-clamp-1'>
             {data}
           </div>
         )
@@ -109,10 +112,11 @@ export default function EmployeeTable(props: any) {
       dataIndex: 'lastName',
       key: 'lastName',
       sorter: (a, b) => a.lastName.localeCompare(b.lastName),
-      width: 160,
+      width: 180,
+      align: 'center',
       render: (data) => {
         return (
-          <div className='w-[160px] overflow-hidden line-clamp-1'>
+          <div className='w-[180px] overflow-hidden line-clamp-1'>
             {data}
           </div>
         )
@@ -123,10 +127,11 @@ export default function EmployeeTable(props: any) {
       dataIndex: 'address',
       key: 'address',
       sorter: (a, b) => a.address.localeCompare(b.address),
-      width: 220,
+      width: 240,
+      align: 'center',
       render: (data) => {
         return (
-          <div className='w-[220px] overflow-hidden line-clamp-1'>
+          <div className='w-[240px] overflow-hidden line-clamp-1'>
             {data}
           </div>
         )
@@ -137,10 +142,11 @@ export default function EmployeeTable(props: any) {
       dataIndex: 'position',
       key: 'position',
       sorter: (a, b) => a.position.localeCompare(b.position),
-      width: 160,
+      width: 180,
+      align: 'center',
       render: (data) => {
         return (
-          <div className='w-[160px] overflow-hidden line-clamp-1'>
+          <div className='w-[180px] overflow-hidden line-clamp-1'>
             {data}
           </div>
         )
@@ -152,6 +158,7 @@ export default function EmployeeTable(props: any) {
       key: 'workStartDate',
       sorter: (a, b) => a.address.localeCompare(b.address),
       width: 110,
+      align: 'center',
       render: (data) => {
         return (
           <div className='w-[110px] overflow-hidden line-clamp-1'>
@@ -166,6 +173,7 @@ export default function EmployeeTable(props: any) {
       key: 'resignationDate',
       sorter: (a, b) => a.address.localeCompare(b.address),
       width: 110,
+      align: 'center',
       render: (data) => {
         return (
           <div className='w-[110px] overflow-hidden line-clamp-1'>
@@ -178,6 +186,7 @@ export default function EmployeeTable(props: any) {
       title: 'Action',
       dataIndex: 'employeeId',
       key: 'employeeId',
+      align: 'center',
       render: (employeeId) => (
         <div className='flex justify-center items-center space-x-3'>
           <Link href={`/employee/view/${employeeId}`} className='cursor-default'>

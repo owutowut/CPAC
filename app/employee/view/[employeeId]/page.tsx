@@ -1,21 +1,24 @@
 "use client"
 
-import EmployeePaymentTable from '@/components/table/employeePayment'
+import EmployeePaymentTable from '@/components/table/employeePaymentTable'
 import { EmployeeI } from '@/interfaces/company'
 import { db } from '@/libs/firebase'
 import { initialEmployee } from '@/utils/initial'
 import { doc, getDoc } from 'firebase/firestore'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { BiSolidFileExport } from 'react-icons/bi'
 
 import { IoCaretBack } from 'react-icons/io5'
 import { RiAccountPinBoxFill } from 'react-icons/ri'
 
+import { useReactToPrint } from 'react-to-print';
+
 export default function ViewEmployee() {
   const [loading, setLoading] = useState<boolean>(true);
   const [employeeData, setEmployeeData] = useState<EmployeeI>(initialEmployee);
-
+  const [isPrintContent, setIsPrintContent] = useState<boolean>(false);
 
   const { employeeId } = useParams();
   const refByID = doc(db, `employee/${employeeId}`);
@@ -51,6 +54,10 @@ export default function ViewEmployee() {
             <IoCaretBack className='w-6 h-6' />
             <span>ย้อนกลับ</span>
           </Link>
+          <button onClick={() => setIsPrintContent(true)} className="flex justify-center items-center space-x-2 px-4 py-2 bg-yellow-600 text-white hover:bg-white hover:text-yellow-600 rounded-xl hover:scale-105 duration-300">
+            <BiSolidFileExport className='w-6 h-6' />
+            <span>Export</span>
+          </button>
         </div>
       </div>
       {!loading ?
@@ -59,7 +66,7 @@ export default function ViewEmployee() {
             <p><mark className='bg-transparent font-semibold'> ชื่อ-สกุล พนักงาน : </mark> {employeeData.titleName} {employeeData.firstName} {employeeData.lastName}</p>
             <p><mark className='bg-transparent font-semibold'> เลขประจำตัวประชาชน : </mark> {employeeData.IDcardNumber}</p>
           </div>
-          <EmployeePaymentTable employeeId={employeeId} />
+          <EmployeePaymentTable isPrintContent={isPrintContent} setIsPrintContent={setIsPrintContent} employeeId={employeeId} />
         </div>
         :
         <div className='h-full w-full flex justify-center items-center'>

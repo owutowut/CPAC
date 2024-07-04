@@ -73,6 +73,16 @@ body {
   }
 }
 
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 15px;
+  }
+  body {
+    -webkit-print-color-adjust: exact;
+  }
+}
+
 .area {
   background: #4e54c8;
   width: 100%;

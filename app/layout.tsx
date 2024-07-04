@@ -32,7 +32,7 @@ export default function RootLayout({
           <li></li>
           <li></li>
         </ul>
-        <main className="bg-slate-900 rounded-2xl drop-shadow-xl p-[2rem] mx-[6rem] my-[3rem]">
+        <main className="bg-slate-900 rounded-2xl drop-shadow-xl p-[2rem] mx-[4rem] my-[2rem]">
           {children}
         </main>
       </body>

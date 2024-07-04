@@ -27,19 +27,20 @@ export interface EmployeeI {
 }
 
 export interface EmployeePaymentI {
-    employeeId: string,
-    year: number,
-    month: number,
-    data1: number,
-    data2: number,
-    data3: number,
-    data4: number,
-    data5: number,
-    data6: number,
-    data7: number,
-    data8: number,
-    data9: number,
-    data10: number,
-    data11: number,
-    data12: number,
+    paymentId: string;
+    employeeId: string;
+    year: number;
+    month: number;
+    data1: number;
+    data2: number;
+    data3: number;
+    data4: number;
+    data5: number;
+    data6: number;
+    data7: number;
+    data8: number;
+    data9: number;
+    data10: number;
+    data11: number;
+    data12: number;
 }

@@ -67,6 +67,7 @@ export default function CompanyTable(props: any) {
       key: 'taxNumber',
       sorter: (a, b) => a.taxNumber.localeCompare(b.taxNumber),
       width: 140,
+      align: 'center',
       render: (data) => {
         return (
           <div className='w-[140px] overflow-hidden line-clamp-1'>
@@ -81,6 +82,7 @@ export default function CompanyTable(props: any) {
       key: 'employerNumber',
       sorter: (a, b) => a.employerNumber.localeCompare(b.employerNumber),
       width: 210,
+      align: 'center',
       render: (data) => {
         return (
           <div className='w-[210px] overflow-hidden line-clamp-1'>
@@ -95,6 +97,7 @@ export default function CompanyTable(props: any) {
       key: 'branchNumber',
       sorter: (a, b) => a.branchNumber.localeCompare(b.branchNumber),
       width: 140,
+      align: 'center',
       render: (data) => {
         return (
           <div className='w-[140px] overflow-hidden line-clamp-1'>
@@ -109,6 +112,7 @@ export default function CompanyTable(props: any) {
       key: 'employerName',
       sorter: (a, b) => a.employerName.localeCompare(b.employerName),
       width: 210,
+      align: 'center',
       render: (data) => {
         return (
           <div className='w-[210px] overflow-hidden line-clamp-1'>
@@ -123,6 +127,7 @@ export default function CompanyTable(props: any) {
       key: 'position',
       sorter: (a, b) => a.position.localeCompare(b.position),
       width: 140,
+      align: 'center',
       render: (data) => {
         return (
           <div className='w-[140px] overflow-hidden line-clamp-1'>
@@ -137,6 +142,7 @@ export default function CompanyTable(props: any) {
       key: 'companyName',
       sorter: (a, b) => a.companyName.localeCompare(b.companyName),
       width: 210,
+      align: 'center',
       render: (data) => {
         return (
           <div className='w-[210px] overflow-hidden line-clamp-1'>
@@ -151,6 +157,7 @@ export default function CompanyTable(props: any) {
       key: 'address',
       sorter: (a, b) => a.address.localeCompare(b.address),
       width: 210,
+      align: 'center',
       render: (data) => {
         return (
           <div className='w-[210px] overflow-hidden line-clamp-1'>
@@ -163,6 +170,7 @@ export default function CompanyTable(props: any) {
       title: 'Action',
       dataIndex: 'companyId',
       key: 'companyId',
+      align: 'center',
       render: (e) => (
         <div className='flex justify-center items-center space-x-3'>
           <Link href={'/company/view/' + e} className='cursor-default'>
