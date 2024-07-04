@@ -746,6 +746,7 @@ export default function EmployeePaymentTable(props: any) {
       </div>
       <div ref={contentToPrint} className={`${isPrintContent ? 'block' : 'hidden'} printable-content space-y-2 bg-white rounded-xl`}>
         <div className='rounded-lg text-black p-6 space-y-2'>
+          <p className='text-end'>ปี {selectedYear}</p>
           <p><mark className='bg-transparent font-semibold mr-4'> ชื่อ-สกุล พนักงาน : </mark> {employeeData.titleName} {employeeData.firstName} {employeeData.lastName}</p>
           <p><mark className='bg-transparent font-semibold mr-4'> เลขประจำตัวประชาชน : </mark> {employeeData.IDcardNumber}</p>
         </div>
