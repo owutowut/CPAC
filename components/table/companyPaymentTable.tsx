@@ -457,6 +457,36 @@ export default function CompanyPaymentTable(props: any) {
       )
     },
     {
+      title: 'ค่าจ้าง 40(2)',
+      dataIndex: 'data7',
+      key: 'data7',
+      align: 'center',
+      render: (data: any) => (
+        <p className='text-center p-2'>
+          <FormattedNumber
+            value={data}
+            style="decimal"
+            minimumFractionDigits={2}
+          />
+        </p>
+      )
+    },
+    {
+      title: 'ค่าคอม 40(2)',
+      dataIndex: 'data8',
+      key: 'data8',
+      align: 'center',
+      render: (data: any) => (
+        <p className='text-center p-2'>
+          <FormattedNumber
+            value={data}
+            style="decimal"
+            minimumFractionDigits={2}
+          />
+        </p>
+      )
+    },
+    {
       title: 'รวมเงินได้ 40(2)',
       dataIndex: 'data9',
       key: 'data9',
