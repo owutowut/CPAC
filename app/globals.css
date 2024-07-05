@@ -87,6 +87,10 @@ body {
   box-sizing: border-box;
 }
 
+.ant-modal-close-x {
+  display: none !important;
+}
+
 .area {
   background: #4e54c8;
   width: 100%;

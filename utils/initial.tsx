@@ -45,3 +45,15 @@ export const initialAlertInfo = {
   message: 'แก้ไขข้อมูลสำเร็จ',
   type: 'info'
 }
+
+export const initialLoginSuccess = {
+  className: 'text-green-700',
+  message: 'เข้าสู่ระบบสำเร็จ',
+  type: 'success'
+}
+
+export const initialLoginError = {
+  className: 'text-red-700',
+  message: 'รหัสผ่านผิด กรุณาลองใหม่อีกครั้ง',
+  type: 'error'
+}
