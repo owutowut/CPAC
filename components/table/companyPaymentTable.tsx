@@ -166,7 +166,6 @@ export default function CompanyPaymentTable(props: any) {
       dataIndex: 'name',
       key: 'name',
       align: 'center',
-      width: 240,
       render: (data: string) => (
         <p className='text-center p-2'>
           {data}
@@ -361,7 +360,6 @@ export default function CompanyPaymentTable(props: any) {
       dataIndex: 'name',
       key: 'name',
       align: 'center',
-      width: 240,
       render: (data: string) => (
         <p className='text-center p-2'>
           {data}
