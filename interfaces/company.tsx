@@ -13,8 +13,6 @@ export interface CompanyI {
 }
 
 export interface EmployeeI {
-    data2: number;
-    data1: number;
     employeeId: string;
     companyId: string;
     IDcardNumber: string;
