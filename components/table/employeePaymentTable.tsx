@@ -636,15 +636,15 @@ export default function EmployeePaymentTable(props: any) {
   return (
     <IntlProvider locale="th">
       <div className="w-full h-full text-black overflow-auto space-y-[1rem]">
-        <div className='flex items-center justify-between'>
-          <div className='flex items-center space-x-3'>
+        <div className='xl:flex xl:items-center xl:justify-between xl:space-y-0 space-y-2'>
+          <div className='xl:flex xl:items-center xl:space-x-3 xl:space-y-0 space-y-2'>
             <input
               type='number'
               value={dataReplace}
-              className='w-[8rem] h-[2.4rem] text-center border-slate-900 border rounded-lg text-slate-900 p-2'
+              className='xl:w-[8rem] w-full h-[2.4rem] text-center border-slate-900 border rounded-lg text-slate-900 p-2'
               onChange={(e) => setDataReplace(parseFloat(e.target.value))}
             />
-            <Select className='w-[10rem] h-[2.4rem]' value={selectedTitle} onChange={(e) => setSelectedTitle(e)} placement='bottomLeft' placeholder="เลือกข้อมูล...">
+            <Select className='xl:w-[10rem] w-full h-[2.4rem]' value={selectedTitle} onChange={(e) => setSelectedTitle(e)} placement='bottomLeft' placeholder="เลือกข้อมูล...">
               {title.map((title, index) => (
                 <>
                   {index + 1 === 6 || index + 1 === 9 || index + 1 === 10 ?
@@ -657,13 +657,13 @@ export default function EmployeePaymentTable(props: any) {
                 </>
               ))}
             </Select>
-            <span onClick={() => onReplaceData()} className='w-[5rem] cursor-default h-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
+            <span onClick={() => onReplaceData()} className='xl:w-[5rem] w-full cursor-default h-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
               ตกลง
             </span>
           </div>
-          <div className='flex items-center space-x-3'>
+          <div className='xl:flex xl:items-center xl:space-x-3 xl:space-y-0 space-y-2'>
             {showAlert && <Alert className={alert.className} message={alert.message} type={alert.type} showIcon />}
-            <Select className='w-[8rem] h-[2.4rem]' value={selectedYear} onChange={(e) => setSelectedYear(e)} placement='bottomLeft' placeholder="เลือกปี...">
+            <Select className='xl:w-[8rem] w-full h-[2.4rem]' value={selectedYear} onChange={(e) => setSelectedYear(e)} placement='bottomLeft' placeholder="เลือกปี...">
               {years.map(year => (
                 <Option key={year} value={year}>
                   {year}
@@ -672,12 +672,12 @@ export default function EmployeePaymentTable(props: any) {
             </Select>
             <div className='p-1'>
               {!paymentData.length ?
-                <button onClick={() => createPayment()} className='flex justify-center items-center space-x-2 p-2 bg-green-600 text-white hover:bg-white hover:text-green-600 rounded-xl hover:scale-105 duration-300'>
+                <button onClick={() => createPayment()} className='xl:w-fit w-full h-full flex justify-center items-center space-x-2 p-2 bg-green-600 text-white hover:bg-white hover:text-green-600 rounded-xl hover:scale-105 duration-300'>
                   <IoIosAddCircle className='w-6 h-6' />
                   <span>สร้างตาราง</span>
                 </button>
                 :
-                <button onClick={() => onEditPayment()} className='flex justify-center items-center space-x-2 p-2 bg-blue-600 text-white hover:bg-white hover:text-blue-600 rounded-xl hover:scale-105 duration-300'>
+                <button onClick={() => onEditPayment()} className='xl:w-fit w-full h-full flex justify-center items-center space-x-2 p-2 bg-blue-600 text-white hover:bg-white hover:text-blue-600 rounded-xl hover:scale-105 duration-300'>
                   <AiFillEdit className='w-6 h-6' />
                   <span>บันทึกข้อมูล</span>
                 </button>
@@ -685,7 +685,7 @@ export default function EmployeePaymentTable(props: any) {
             </div>
           </div>
         </div>
-        <div className='bg-white rounded-xl overflow-hidden'>
+        <div className='bg-white rounded-xl overflow-auto'>
           <Table
             columns={columns}
             dataSource={paymentData}

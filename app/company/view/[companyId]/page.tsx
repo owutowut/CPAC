@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 
@@ -18,10 +18,15 @@ import { FaBuilding } from 'react-icons/fa6'
 import { IoIosAddCircle } from 'react-icons/io'
 import { IoCaretBack } from 'react-icons/io5'
 import { RiAccountPinBoxFill } from 'react-icons/ri'
+import { BiSolidFileExport } from 'react-icons/bi'
+import { useReactToPrint } from 'react-to-print'
+import CompanyPaymentTable from '@/components/table/companyPaymentTable'
 
 export default function ViewCompany() {
   const [loading, setLoading] = useState<boolean>(true);
   const [companyData, setCompanyData] = useState<CompanyI>();
+  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear() + 543);
+  const [isPrintContent, setIsPrintContent] = useState<boolean>(false);
 
   const { companyId } = useParams();
   const refByID = doc(db, `company/${companyId}`);
@@ -46,23 +51,9 @@ export default function ViewCompany() {
   }, []);
 
   const [searchEmployee, setSearchEmployee] = useState<string>('')
+  const [searchCompanyPayment, setSearchCompanyPayment] = useState<string>('')
 
   const { Option } = Select;
-
-  const months = [
-    { value: '1', label: 'มกราคม' },
-    { value: '2', label: 'กุมภาพันธ์' },
-    { value: '3', label: 'มีนาคม' },
-    { value: '4', label: 'เมษายน' },
-    { value: '5', label: 'พฤษภาคม' },
-    { value: '6', label: 'มิถุนายน' },
-    { value: '7', label: 'กรกฎาคม' },
-    { value: '8', label: 'สิงหาคม' },
-    { value: '9', label: 'กันยายน' },
-    { value: '10', label: 'ตุลาคม' },
-    { value: '11', label: 'พฤศจิกายน' },
-    { value: '12', label: 'ธันวาคม' },
-  ];
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 51 }, (_, i) => currentYear - i).map(year => year + 543);
@@ -70,10 +61,10 @@ export default function ViewCompany() {
   return (
     <>
       <div className='space-y-[2rem]'>
-        <div className='flex justify-between items-center'>
-          <div className='flex items-center space-x-4'>
-            <FaBuilding className='w-10 h-10' />
-            <h2 className='font-bold text-[1.8rem]'>ข้อมูลสถานประกอบการ</h2>
+        <div className='xl:flex xl:justify-between xl:items-center xl:space-y-0 space-y-4'>
+          <div className='flex items-center lg:space-x-4 space-x-2'>
+            <FaBuilding className='lg:w-10 lg:h-10 w-8 h-8' />
+            <h2 className='lg:text-[1.8rem] text-[1.3rem] font-bold'>ข้อมูลสถานประกอบการ</h2>
           </div>
           <Link href={'/'} className='flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white hover:bg-white hover:text-slate-600 rounded-xl hover:scale-105 duration-300'>
             <IoCaretBack className='w-6 h-6' />
@@ -82,7 +73,7 @@ export default function ViewCompany() {
         </div>
         {!loading ?
           <>
-            <div className='bg-white rounded-lg text-black p-6 grid grid-cols-3 gap-4'>
+            <div className='xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 bg-white rounded-lg text-black p-6 grid gap-4'>
               <p><mark className='bg-transparent font-bold mr-2'> ชื่อบริษัท : </mark> {companyData && companyData.companyName} </p>
               <p><mark className='bg-transparent font-bold mr-2'> เลขประจำตัวผู้เสียภาษี(13 หลัก)* : </mark> {companyData && companyData.taxNumber} </p>
               <p><mark className='bg-transparent font-bold mr-2'> ลำดับที่สาขา : </mark> {companyData && companyData.branchNumber} </p>
@@ -92,13 +83,13 @@ export default function ViewCompany() {
               <p><mark className='bg-transparent font-bold mr-2'> ที่อยู่ : </mark> {companyData && companyData.address} </p>
             </div>
             <div className='space-y-[2rem]'>
-              <div className='flex items-center justify-between'>
-                <div className='flex items-center space-x-4'>
-                  <RiAccountPinBoxFill className='w-10 h-10' />
-                  <h2 className='font-bold text-[1.8rem]'>ข้อมูลพนักงาน</h2>
+              <div className='xl:flex xl:justify-between xl:items-center xl:space-y-0 space-y-4'>
+                <div className='flex items-center lg:space-x-4 space-x-2'>
+                  <RiAccountPinBoxFill className='lg:w-10 lg:h-10 w-8 h-8' />
+                  <h2 className='lg:text-[1.8rem] text-[1.3rem] font-bold'>ข้อมูลพนักงาน</h2>
                 </div>
-                <div className='flex items-center space-x-4'>
-                  <Input onChange={(e) => setSearchEmployee(e.target.value)} className='text-[1rem] w-[30rem] h-[2.6rem] rounded-xl' placeholder="ค้นหาพนักงานด้วยเลขบัตรประชาชน..." allowClear />
+                <div className='xl:flex xl:items-center xl:space-x-4 xl:space-y-0 space-y-4'>
+                  <Input onChange={(e) => setSearchEmployee(e.target.value)} className='xl:w-[30rem] text-[1rem] h-[2.6rem] rounded-xl' placeholder="ค้นหาพนักงานด้วยเลขบัตรประชาชน..." allowClear />
                   <Link href={`/employee/add/${companyId}`} className='flex justify-center items-center space-x-2 p-2 bg-green-600 text-white hover:bg-white hover:text-green-600 rounded-xl hover:scale-105 duration-300'>
                     <IoIosAddCircle className='w-6 h-6' />
                     <span>เพิ่มข้อมูล</span>
@@ -108,27 +99,28 @@ export default function ViewCompany() {
               <EmployeeTable searchEmployee={searchEmployee} companyId={companyId} />
             </div>
             <div className='space-y-[2rem]'>
-              <div className='flex items-center justify-between'>
-                <div className='flex items-center space-x-4'>
-                  <RiAccountPinBoxFill className='w-10 h-10' />
-                  <h2 className='font-bold text-[1.8rem]'>เงินเดือน ค่าจ้าง ค่าคอม ประจำเดือน</h2>
+              <div className='xl:flex xl:justify-between xl:items-center xl:space-y-0 space-y-4'>
+                <div className='flex items-center lg:space-x-4 space-x-2'>
+                  <FaBuilding className='lg:w-10 lg:h-10 w-8 h-8' />
+                  <h2 className='lg:text-[1.8rem] text-[1.3rem] font-bold'>เงินเดือน ค่าจ้าง ค่าคอม ประจำเดือน</h2>
                 </div>
-                <div className='flex items-center space-x-4'>
-                  <Select placement='bottomLeft' placeholder="เลือกเดือน..." style={{ width: 120 }}>
-                    {months.map(month => (
-                      <Option key={month.value} value={month.value}>
-                        {month.label}
-                      </Option>
-                    ))}
-                  </Select>
-                  <Select placement='bottomLeft' placeholder="เลือกปี..." style={{ width: 120 }}>
+                <div className='xl:flex xl:items-center xl:space-x-4 xl:space-y-0 space-y-4'>
+                  <Input onChange={(e) => setSearchCompanyPayment(e.target.value)} className='xl:w-[30rem] text-[1rem] h-[2.6rem] rounded-xl' placeholder="ค้นหาพนักงานด้วยเลขบัตรประชาชน..." allowClear />
+                  <Select className='xl:w-[8rem] w-full h-[2.4rem]' value={selectedYear} onChange={(e) => setSelectedYear(e)} placement='bottomLeft' placeholder="เลือกปี...">
                     {years.map(year => (
                       <Option key={year} value={year}>
                         {year}
                       </Option>
                     ))}
                   </Select>
+                  <button onClick={() => setIsPrintContent(true)} className="xl:w-fit w-full flex justify-center items-center space-x-2 px-4 py-2 bg-yellow-600 text-white hover:bg-white hover:text-yellow-600 rounded-xl hover:scale-105 duration-300">
+                    <BiSolidFileExport className='w-6 h-6' />
+                    <span>Export</span>
+                  </button>
                 </div>
+              </div>
+              <div>
+                <CompanyPaymentTable companyName={companyData?.companyName} isPrintContent={isPrintContent} setIsPrintContent={setIsPrintContent} searchCompanyPayment={searchCompanyPayment} selectedYear={selectedYear} />
               </div>
             </div>
           </>

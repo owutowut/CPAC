@@ -44,17 +44,17 @@ export default function ViewEmployee() {
 
   return (
     <div className='space-y-[2rem]'>
-      <div className='flex justify-between items-center'>
-        <div className='flex items-center space-x-4'>
-          <RiAccountPinBoxFill className='w-10 h-10' />
-          <h2 className='font-bold text-[1.8rem]'>ข้อมูลพนักงาน</h2>
+      <div className='xl:flex xl:justify-between xl:items-center xl:space-y-0 space-y-4'>
+        <div className='flex items-center lg:space-x-4 space-x-2'>
+          <RiAccountPinBoxFill className='lg:w-10 lg:h-10 w-8 h-8' />
+          <h2 className='lg:text-[1.8rem] text-[1.3rem] font-bold'>ข้อมูลพนักงาน</h2>
         </div>
-        <div className='flex items-center space-x-4'>
+        <div className='xl:flex xl:items-center xl:space-x-4 xl:space-y-0 space-y-4'>
           <Link href={`/company/view/${employeeData.companyId}`} className='flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white hover:bg-white hover:text-slate-600 rounded-xl hover:scale-105 duration-300'>
             <IoCaretBack className='w-6 h-6' />
             <span>ย้อนกลับ</span>
           </Link>
-          <button onClick={() => setIsPrintContent(true)} className="flex justify-center items-center space-x-2 px-4 py-2 bg-yellow-600 text-white hover:bg-white hover:text-yellow-600 rounded-xl hover:scale-105 duration-300">
+          <button onClick={() => setIsPrintContent(true)} className="xl:w-fit w-full flex justify-center items-center space-x-2 px-4 py-2 bg-yellow-600 text-white hover:bg-white hover:text-yellow-600 rounded-xl hover:scale-105 duration-300">
             <BiSolidFileExport className='w-6 h-6' />
             <span>Export</span>
           </button>

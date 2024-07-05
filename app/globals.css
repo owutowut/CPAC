@@ -83,6 +83,10 @@ body {
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
 .area {
   background: #4e54c8;
   width: 100%;

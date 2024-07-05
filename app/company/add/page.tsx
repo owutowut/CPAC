@@ -100,25 +100,25 @@ export default function CreateCompany() {
 
   return (
     <form onSubmit={onCreateCompany} className='space-y-[2rem]'>
-      <div className='flex justify-between items-center'>
-        <div className='flex items-center space-x-4'>
-          <FaBuilding className='w-10 h-10' />
-          <h2 className='font-bold text-[1.8rem]'>เพิ่มข้อมูลสถานประกอบการ</h2>
+      <div className='xl:flex xl:justify-between xl:items-center xl:space-y-0 space-y-4'>
+        <div className='flex items-center lg:space-x-4 space-x-2'>
+          <FaBuilding className='lg:w-10 lg:h-10 w-8 h-8' />
+          <h2 className='lg:text-[1.8rem] text-[1.3rem] font-bold'>เพิ่มข้อมูลสถานประกอบการ</h2>
         </div>
-        <div className='flex items-center space-x-4'>
+        <div className='xl:flex xl:items-center xl:space-x-4 xl:space-y-0 space-y-4'>
           {showAlert && <Alert className={alert.className} message={alert.message} type={alert.type} showIcon />}
           <Link href={'/'} className='flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white hover:bg-white hover:text-slate-600 rounded-xl hover:scale-105 duration-300'>
             <IoCaretBack className='w-6 h-6' />
             <span>ย้อนกลับ</span>
           </Link>
-          <button type='submit' className='flex justify-center items-center space-x-2 p-2 bg-green-600 text-white hover:bg-white hover:text-green-600 rounded-xl hover:scale-105 duration-300'>
+          <button type='submit' className='xl:w-fit w-full flex justify-center items-center space-x-2 p-2 bg-green-600 text-white hover:bg-white hover:text-green-600 rounded-xl hover:scale-105 duration-300'>
             <IoIosAddCircle className='w-6 h-6' />
             <span>เพิ่มข้อมูล</span>
           </button>
         </div>
       </div>
-      <div className='flex space-x-6'>
-        <div className='w-[60%] h-full bg-white rounded-xl text-slate-900 p-4 space-y-4'>
+      <div className='xl:flex xl:space-x-4 xl:space-y-0 space-y-4'>
+        <div className='xl:w-[60%] h-full bg-white rounded-xl text-slate-900 p-4 space-y-4'>
           <div className='space-y-2'>
             <p>เลขประจำตัวผู้เสียภาษี(13 หลัก)*</p>
             <input type='number' value={companyData.taxNumber} onChange={(e) => handleCompanyDataChange('taxNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
@@ -148,7 +148,7 @@ export default function CreateCompany() {
             <textarea value={companyData.address} onChange={(e) => handleCompanyDataChange('address', e.target.value)} required rows={6} className='w-full bg-slate-900 rounded-xl text-white p-2'></textarea>
           </div>
         </div>
-        <div className='w-[40%] h-full bg-white rounded-xl text-slate-900 overflow-hidden'>
+        <div className='xl:w-[40%] h-full bg-white rounded-xl text-slate-900 overflow-auto'>
           <table id='customTable'>
             <thead>
               <tr>
@@ -183,8 +183,8 @@ export default function CreateCompany() {
               ))}
             </tbody>
           </table>
-          <div className='flex space-x-4 p-4'>
-            <span className='font-semibold whitespace-nowrap'>กรอกทั้งหมด</span>
+          <div className='xl:flex xl:space-x-4 xl:space-y-0 p-4 space-y-4'>
+            <span className='xl:justify-start justify-center flex font-semibold whitespace-nowrap'>กรอกทั้งหมด</span>
             <input value={allRatesEmployee} type="number" onChange={(e) => setAllRatesEmployee(parseFloat(e.target.value))} required className='text-center w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
             <span onClick={onSetAllEmployeeRates} className='cursor-default h-full w-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
               ตกลง

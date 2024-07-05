@@ -221,8 +221,7 @@ export default function EmployeeTable(props: any) {
 
   return (
     <>
-      <div className='h-full w-full relative'>
-        <p className='bg-transparent absolute bottom-[3%] left-[2%] z-20 text-red-500 text-[0.9rem]'>* กรณีไม่สามารถใช้ที่อยู่ตามบัตรฯ ให้ใช้ที่อยู่บริษัทที่ทำงานปัจจุบัน</p>
+      <div className='h-full w-full space-y-4'>
         <Table
           columns={columns}
           dataSource={employeeData}
@@ -232,6 +231,7 @@ export default function EmployeeTable(props: any) {
           scroll={{ x: 'max-content' }}
           rowKey={'key'}
         />
+        <p className='bg-transparent z-20 text-red-500 text-[0.9rem]'>* กรณีไม่สามารถใช้ที่อยู่ตามบัตรฯ ให้ใช้ที่อยู่บริษัทที่ทำงานปัจจุบัน</p>
       </div>
     </>
   )
