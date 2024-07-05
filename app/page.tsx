@@ -10,7 +10,6 @@ import { IoIosAddCircle } from "react-icons/io";
 import { useState } from 'react';
 import { ImBooks } from 'react-icons/im';
 
-import "./globals.css";
 import { useEffect } from "react";
 import LoginModal from "@/components/form/LoginForm";
 

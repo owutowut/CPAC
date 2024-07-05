@@ -76,7 +76,7 @@ body {
 @media print {
   @page {
     size: A4 portrait;
-    margin: 15px;
+    margin: 10px;
   }
   body {
     -webkit-print-color-adjust: exact;
