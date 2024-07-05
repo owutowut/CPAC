@@ -106,6 +106,7 @@ export default function CompanyPaymentTable(props: any) {
         data12Array[index] = sumData12;
         const updatedDataArray = employeeData.map((employee, index) => ({
           ...employee,
+          name: `${employee.titleName} ${employee.firstName} ${employee.lastName}`,
           data1: data1Array[index],
           data2: data2Array[index],
           data3: data3Array[index],
@@ -161,43 +162,11 @@ export default function CompanyPaymentTable(props: any) {
 
   const columns: TableProps<any>['columns'] = [
     {
-      title: 'เลขบัตรประชาชน',
-      dataIndex: 'IDcardNumber',
-      key: 'IDcardNumber',
+      title: 'ชื่อ - นามสกุล',
+      dataIndex: 'name',
+      key: 'name',
       align: 'center',
-      render: (data: string) => (
-        <p className='text-center p-2'>
-          {data}
-        </p>
-      )
-    },
-    {
-      title: 'คำนำหน้านาม',
-      dataIndex: 'titleName',
-      key: 'titleName',
-      align: 'center',
-      render: (data: string) => (
-        <p className='text-center p-2'>
-          {data}
-        </p>
-      )
-    },
-    {
-      title: 'ชื่อ',
-      dataIndex: 'firstName',
-      key: 'firstName',
-      align: 'center',
-      render: (data: string) => (
-        <p className='text-center p-2'>
-          {data}
-        </p>
-      )
-    },
-    {
-      title: 'สกุล',
-      dataIndex: 'lastName',
-      key: 'lastName',
-      align: 'center',
+      width: 240,
       render: (data: string) => (
         <p className='text-center p-2'>
           {data}
@@ -388,43 +357,11 @@ export default function CompanyPaymentTable(props: any) {
 
   const columnsForPrint: TableProps<any>['columns'] = [
     {
-      title: 'เลขบัตรประชาชน',
-      dataIndex: 'IDcardNumber',
-      key: 'IDcardNumber',
+      title: 'ชื่อ - นามสกุล',
+      dataIndex: 'name',
+      key: 'name',
       align: 'center',
-      render: (data: string) => (
-        <p className='text-center p-2'>
-          {data}
-        </p>
-      )
-    },
-    {
-      title: 'คำนำหน้านาม',
-      dataIndex: 'titleName',
-      key: 'titleName',
-      align: 'center',
-      render: (data: string) => (
-        <p className='text-center p-2'>
-          {data}
-        </p>
-      )
-    },
-    {
-      title: 'ชื่อ',
-      dataIndex: 'firstName',
-      key: 'firstName',
-      align: 'center',
-      render: (data: string) => (
-        <p className='text-center p-2'>
-          {data}
-        </p>
-      )
-    },
-    {
-      title: 'สกุล',
-      dataIndex: 'lastName',
-      key: 'lastName',
-      align: 'center',
+      width: 240,
       render: (data: string) => (
         <p className='text-center p-2'>
           {data}
@@ -522,36 +459,6 @@ export default function CompanyPaymentTable(props: any) {
       )
     },
     {
-      title: 'ค่าจ้าง 40(2)',
-      dataIndex: 'data7',
-      key: 'data7',
-      align: 'center',
-      render: (data: any) => (
-        <p className='text-center p-2'>
-          <FormattedNumber
-            value={data}
-            style="decimal"
-            minimumFractionDigits={2}
-          />
-        </p>
-      )
-    },
-    {
-      title: 'ค่าคอม 40(2)',
-      dataIndex: 'data8',
-      key: 'data8',
-      align: 'center',
-      render: (data: any) => (
-        <p className='text-center p-2'>
-          <FormattedNumber
-            value={data}
-            style="decimal"
-            minimumFractionDigits={2}
-          />
-        </p>
-      )
-    },
-    {
       title: 'รวมเงินได้ 40(2)',
       dataIndex: 'data9',
       key: 'data9',
@@ -624,7 +531,6 @@ export default function CompanyPaymentTable(props: any) {
     if (isPrintContent) {
       printContent()
     }
-    console.log(isPrintContent);
   }, [isPrintContent])
 
   return (
@@ -637,12 +543,6 @@ export default function CompanyPaymentTable(props: any) {
         scroll={{ x: 'max-content' }}
         summary={() => (
           <Table.Summary.Row>
-            <Table.Summary.Cell align='center' index={-4}>
-            </Table.Summary.Cell>
-            <Table.Summary.Cell align='center' index={-3}>
-            </Table.Summary.Cell>
-            <Table.Summary.Cell align='center' index={-2}>
-            </Table.Summary.Cell>
             <Table.Summary.Cell align='center' index={-1} className='font-bold'>
               <p>รวมทั้งสิ้น</p>
             </Table.Summary.Cell>
@@ -704,12 +604,6 @@ export default function CompanyPaymentTable(props: any) {
           pagination={false}
           summary={() => (
             <Table.Summary.Row>
-              <Table.Summary.Cell align='center' index={-4}>
-              </Table.Summary.Cell>
-              <Table.Summary.Cell align='center' index={-3}>
-              </Table.Summary.Cell>
-              <Table.Summary.Cell align='center' index={-2}>
-              </Table.Summary.Cell>
               <Table.Summary.Cell align='center' index={-1} className='font-bold'>
                 <p>รวมทั้งสิ้น</p>
               </Table.Summary.Cell>
