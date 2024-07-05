@@ -17,16 +17,14 @@ import LoginModal from "@/components/form/LoginForm";
 export default function Home() {
   const [searchCompany, setSearchCompany] = useState<string>('')
 
-  const accessToken = localStorage.getItem('accessACPN');
-
   useEffect(() => {
+    const accessToken = localStorage.getItem('accessACPN');
     if (accessToken !== 'true') {
       setModalVisible(true);
     } else {
       setModalVisible(false);
-
     }
-  }, [accessToken]);
+  }, []);
 
   const [modalVisible, setModalVisible] = useState(false);
 
