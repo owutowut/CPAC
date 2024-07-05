@@ -106,37 +106,37 @@ export default function EditEmployee() {
             <div className='space-y-4'>
               <div className='space-y-2'>
                 <p>เลขบัตรประชาชน</p>
-                <input value={employeeData.IDcardNumber} onChange={(e) => handleEmployeeDataChange('IDcardNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+                <input value={employeeData.IDcardNumber} onChange={(e) => handleEmployeeDataChange('IDcardNumber', e.target.value)} required className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
               </div>
               <div className='space-y-2'>
                 <p>คำนำหน้านาม</p>
-                <input value={employeeData.titleName} onChange={(e) => handleEmployeeDataChange('titleName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+                <input value={employeeData.titleName} onChange={(e) => handleEmployeeDataChange('titleName', e.target.value)} required className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
               </div>
               <div className='space-y-2'>
                 <p>ชื่อ</p>
-                <input value={employeeData.firstName} onChange={(e) => handleEmployeeDataChange('firstName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+                <input value={employeeData.firstName} onChange={(e) => handleEmployeeDataChange('firstName', e.target.value)} required className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
               </div>
               <div className='space-y-2'>
                 <p>สกุล</p>
-                <input value={employeeData.lastName} onChange={(e) => handleEmployeeDataChange('lastName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+                <input value={employeeData.lastName} onChange={(e) => handleEmployeeDataChange('lastName', e.target.value)} required className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
               </div>
               <div className='space-y-2'>
                 <p>ที่อยู่ตามบัตรประชาชนหรือที่อยู่ที่ติดต่อได้</p>
-                <textarea value={employeeData.address} onChange={(e) => handleEmployeeDataChange('address', e.target.value)} required rows={6} className='w-full bg-slate-900 rounded-xl text-white p-2'></textarea>
+                <textarea value={employeeData.address} onChange={(e) => handleEmployeeDataChange('address', e.target.value)} required rows={6} className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></textarea>
               </div>
             </div>
             <div className='space-y-4'>
               <div className='space-y-2'>
                 <p>ตำแหน่งงาน</p>
-                <input value={employeeData.position} onChange={(e) => handleEmployeeDataChange('position', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+                <input value={employeeData.position} onChange={(e) => handleEmployeeDataChange('position', e.target.value)} required className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
               </div>
               <div className='space-y-2'>
                 <p>วันที่เริ่มงาน</p>
-                <input value={employeeData.workStartDate} onChange={(e) => handleEmployeeDataChange('workStartDate', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+                <input value={employeeData.workStartDate} onChange={(e) => handleEmployeeDataChange('workStartDate', e.target.value)} required className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
               </div>
               <div className='space-y-2'>
                 <p>วันที่ลาออก</p>
-                <input value={employeeData.resignationDate} onChange={(e) => handleEmployeeDataChange('resignationDate', e.target.value)} className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+                <input value={employeeData.resignationDate} onChange={(e) => handleEmployeeDataChange('resignationDate', e.target.value)} className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
               </div>
             </div>
           </div>

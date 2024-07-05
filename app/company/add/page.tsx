@@ -122,31 +122,31 @@ export default function CreateCompany() {
           <div className='xl:w-[60%] h-full bg-white rounded-xl text-slate-900 p-4 space-y-4'>
             <div className='space-y-2'>
               <p>เลขประจำตัวผู้เสียภาษี(13 หลัก)*</p>
-              <input type='number' value={companyData.taxNumber} onChange={(e) => handleCompanyDataChange('taxNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input type='number' value={companyData.taxNumber} onChange={(e) => handleCompanyDataChange('taxNumber', e.target.value)} required className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>เลขที่บัญชีนายจ้าง</p>
-              <input type='number' value={companyData.employerNumber} onChange={(e) => handleCompanyDataChange('employerNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input type='number' value={companyData.employerNumber} onChange={(e) => handleCompanyDataChange('employerNumber', e.target.value)} required className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>ลำดับที่สาขา</p>
-              <input type='number' value={companyData.branchNumber} onChange={(e) => handleCompanyDataChange('branchNumber', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input type='number' value={companyData.branchNumber} onChange={(e) => handleCompanyDataChange('branchNumber', e.target.value)} required className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>ชื่อนายจ้าง</p>
-              <input value={companyData.employerName} onChange={(e) => handleCompanyDataChange('employerName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={companyData.employerName} onChange={(e) => handleCompanyDataChange('employerName', e.target.value)} required className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>ตำแหน่ง</p>
-              <input value={companyData.position} onChange={(e) => handleCompanyDataChange('position', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={companyData.position} onChange={(e) => handleCompanyDataChange('position', e.target.value)} required className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>ชื่อบริษัท</p>
-              <input value={companyData.companyName} onChange={(e) => handleCompanyDataChange('companyName', e.target.value)} required className='w-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={companyData.companyName} onChange={(e) => handleCompanyDataChange('companyName', e.target.value)} required className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
             </div>
             <div className='space-y-2'>
               <p>ที่อยู่</p>
-              <textarea value={companyData.address} onChange={(e) => handleCompanyDataChange('address', e.target.value)} required rows={6} className='w-full bg-slate-900 rounded-xl text-white p-2'></textarea>
+              <textarea value={companyData.address} onChange={(e) => handleCompanyDataChange('address', e.target.value)} required rows={6} className='w-full border border-slate-900 rounded-lg text-slate-900 p-2'></textarea>
             </div>
           </div>
           <div className='xl:w-[40%] h-full bg-white rounded-xl text-slate-900 overflow-auto'>
@@ -168,7 +168,7 @@ export default function CreateCompany() {
                         value={employeeSocialSecurityRates[index]}
                         onChange={(e) => handleEmployeeRatesChange(index, e.target.value)}
                         required
-                        className='text-center w-full h-full bg-slate-900 rounded-lg text-white p-2'
+                        className='text-center w-full h-full border border-slate-900 rounded-lg text-slate-900 p-2'
                       />
                     </td>
                     <td>
@@ -177,7 +177,7 @@ export default function CreateCompany() {
                         value={employerSocialSecurityRates[index]}
                         onChange={(e) => handleEmployerRatesChange(index, e.target.value)}
                         required
-                        className='text-center w-full h-full bg-slate-900 rounded-lg text-white p-2'
+                        className='text-center w-full h-full border border-slate-900 rounded-lg text-slate-900 p-2'
                       />
                     </td>
                   </tr>
@@ -186,11 +186,11 @@ export default function CreateCompany() {
             </table>
             <div className='xl:flex xl:space-x-4 xl:space-y-0 p-4 space-y-4'>
               <span className='xl:justify-start justify-center flex font-semibold whitespace-nowrap'>กรอกทั้งหมด</span>
-              <input value={allRatesEmployee} type="number" onChange={(e) => setAllRatesEmployee(parseFloat(e.target.value))} required className='text-center w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={allRatesEmployee} type="number" onChange={(e) => setAllRatesEmployee(parseFloat(e.target.value))} required className='text-center w-full h-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
               <span onClick={onSetAllEmployeeRates} className='cursor-default h-full w-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
                 ตกลง
               </span>
-              <input value={allRatesEmployer} type="number" onChange={(e) => setAllRatesEmployer(parseFloat(e.target.value))} required className='text-center w-full h-full bg-slate-900 rounded-lg text-white p-2'></input>
+              <input value={allRatesEmployer} type="number" onChange={(e) => setAllRatesEmployer(parseFloat(e.target.value))} required className='text-center w-full h-full border border-slate-900 rounded-lg text-slate-900 p-2'></input>
               <span onClick={onSetAllEmployerRates} className='cursor-default h-full w-full flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white rounded-lg hover:scale-105 duration-300'>
                 ตกลง
               </span>
