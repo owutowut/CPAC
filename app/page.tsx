@@ -63,8 +63,3 @@ export default function Home() {
     </>
   );
 }
-
-export function getCookie(name: string) {
-  const cookieValue = document.cookie.match(`(^|;) ?${name}=([^;]*)(;|$)`);
-  return cookieValue ? cookieValue[2] : null;
-}
