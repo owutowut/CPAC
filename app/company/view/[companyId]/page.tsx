@@ -59,7 +59,7 @@ export default function ViewCompany() {
   const years = Array.from({ length: 51 }, (_, i) => currentYear - i).map(year => year + 543);
 
   return (
-    <>
+    <div className="bg-slate-900 rounded-2xl drop-shadow-xl p-[2rem] xl:mx-[4rem] xl:my-[2rem] md:mx-[2rem] md:my-[2rem] mx-[1rem] my-[1rem]">
       <div className='space-y-[2rem]'>
         <div className='xl:flex xl:justify-between xl:items-center xl:space-y-0 space-y-4'>
           <div className='flex items-center lg:space-x-4 space-x-2'>
@@ -133,6 +133,6 @@ export default function ViewCompany() {
           </div>
         }
       </div>
-    </>
+    </div>
   )
 }
