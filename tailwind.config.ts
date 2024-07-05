@@ -7,6 +7,7 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    darkMode: false,
     extend: {
       screens: {
         sm: "425px",

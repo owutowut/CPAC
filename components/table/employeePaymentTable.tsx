@@ -742,7 +742,7 @@ export default function EmployeePaymentTable(props: any) {
       </div >
       <div className={`${isPrintContent ? 'block' : 'hidden'} flex items-center space-x-4 pt-[1rem]`}>
         <BiSolidFileExport className='w-10 h-10' />
-        <h2 className='font-bold text-[1.8rem]'>ตัวอย่างส่งออก</h2>
+        <h2 className='font-bold text-[1.8rem] text-white'>ตัวอย่างส่งออก</h2>
       </div>
       <div ref={contentToPrint} className={`${isPrintContent ? 'block' : 'hidden'} printable-content space-y-2 bg-white rounded-xl`}>
         <div className='rounded-lg text-black p-6 space-y-2'>

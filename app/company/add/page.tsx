@@ -103,7 +103,7 @@ export default function CreateCompany() {
       <div className='xl:flex xl:justify-between xl:items-center xl:space-y-0 space-y-4'>
         <div className='flex items-center lg:space-x-4 space-x-2'>
           <FaBuilding className='lg:w-10 lg:h-10 w-8 h-8' />
-          <h2 className='lg:text-[1.8rem] text-[1.3rem] font-bold'>เพิ่มข้อมูลสถานประกอบการ</h2>
+          <h2 className='lg:text-[1.8rem] text-[1.3rem] font-bold text-white'>เพิ่มข้อมูลสถานประกอบการ</h2>
         </div>
         <div className='xl:flex xl:items-center xl:space-x-4 xl:space-y-0 space-y-4'>
           {showAlert && <Alert className={alert.className} message={alert.message} type={alert.type} showIcon />}
