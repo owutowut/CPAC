@@ -63,7 +63,7 @@ export default function ViewCompany() {
       <div className='space-y-[2rem]'>
         <div className='xl:flex xl:justify-between xl:items-center xl:space-y-0 space-y-4'>
           <div className='flex items-center lg:space-x-4 space-x-2'>
-            <FaBuilding className='lg:w-10 lg:h-10 w-8 h-8' />
+            <FaBuilding className='lg:w-10 lg:h-10 w-8 h-8 text-white' />
             <h2 className='lg:text-[1.8rem] text-[1.3rem] font-bold text-white'>ข้อมูลสถานประกอบการ</h2>
           </div>
           <Link href={'/'} className='flex justify-center items-center space-x-2 p-2 bg-slate-600 text-white hover:bg-white hover:text-slate-600 rounded-xl hover:scale-105 duration-300'>
@@ -85,7 +85,7 @@ export default function ViewCompany() {
             <div className='space-y-[2rem]'>
               <div className='xl:flex xl:justify-between xl:items-center xl:space-y-0 space-y-4'>
                 <div className='flex items-center lg:space-x-4 space-x-2'>
-                  <RiAccountPinBoxFill className='lg:w-10 lg:h-10 w-8 h-8' />
+                  <RiAccountPinBoxFill className='lg:w-10 lg:h-10 w-8 h-8 text-white' />
                   <h2 className='lg:text-[1.8rem] text-[1.3rem] font-bold text-white'>ข้อมูลพนักงาน</h2>
                 </div>
                 <div className='xl:flex xl:items-center xl:space-x-4 xl:space-y-0 space-y-4'>
@@ -101,7 +101,7 @@ export default function ViewCompany() {
             <div className='space-y-[2rem]'>
               <div className='xl:flex xl:justify-between xl:items-center xl:space-y-0 space-y-4'>
                 <div className='flex items-center lg:space-x-4 space-x-2'>
-                  <FaBuilding className='lg:w-10 lg:h-10 w-8 h-8' />
+                  <FaBuilding className='lg:w-10 lg:h-10 w-8 h-8 text-white' />
                   <h2 className='lg:text-[1.8rem] text-[1.3rem] font-bold text-white'>ตารางสรุปรายการ</h2>
                 </div>
                 <div className='xl:flex xl:items-center xl:space-x-4 xl:space-y-0 space-y-4'>
