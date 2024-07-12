@@ -579,7 +579,7 @@ export default function CompanyPaymentTable(props: any) {
                 {index === 5 ?
                   <Table.Summary.Cell key={column.key} align='center' index={index} className='bg-blue-200 font-bold'>
                     <FormattedNumber
-                      value={sumData[0]}
+                      value={sumData[index]}
                       style="decimal"
                       minimumFractionDigits={2}
                     />
@@ -640,7 +640,7 @@ export default function CompanyPaymentTable(props: any) {
                   {index === 5 ?
                     <Table.Summary.Cell key={column.key} align='center' index={index} className='font-bold'>
                       <FormattedNumber
-                        value={sumData[0]}
+                        value={sumData[index]}
                         style="decimal"
                         minimumFractionDigits={2}
                       />
